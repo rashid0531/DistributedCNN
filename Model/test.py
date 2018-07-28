@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+import argparse
 import tensorflow as tf
 import os
 from PIL import Image, ImageFile
@@ -6,16 +8,12 @@ import prepare
 from matplotlib import pyplot as plt
 from datetime import datetime
 from tensorflow.python.client import timeline
-import Model.MCNN as model
-
+import modified_MCNN as model
 import os
 import re
 import time
 from datetime import datetime
 
-FLAGS = tf.app.flags.FLAGS
-
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 
 # Source:
 # https://stackoverflow.com/questions/38559755/how-to-get-current-available-gpus-in-tensorflow
@@ -28,54 +26,9 @@ def get_available_gpus():
     return [x.name for x in local_device_protos if x.device_type == 'GPU']
 
 
-print("GPUS ", get_available_gpus())
-############################### Parameters #############################################
+def training_dataset(args):
 
-dataset_train_test_ratio = 0.7
-# gpus_to_use = len(get_available_gpus())
-
-gpus_to_use = 2
-batch_size = 360
-batch_size = 60
-splitted_batch_size = int(batch_size / gpus_to_use)
-num_parallel_calls = 8
-learning_rate = 0.001
-number_of_epoch = 5
-max_number_of_steps = 305 
-prefetch_buffer = gpus_to_use * batch_size * 1
-max_number_of_steps = 1855 
-prefetch_buffer = gpus_to_use * batch_size * 2
-
-tf.app.flags.DEFINE_integer('max_steps', max_number_of_steps, """Number of batches to run.""")
-tf.app.flags.DEFINE_integer('batch_size', batch_size, """Number of images to process in a batch.""")
-tf.app.flags.DEFINE_integer('num_gpus', gpus_to_use, """How many GPUs to use.""")
-tf.app.flags.DEFINE_integer('splitted_batch_size', splitted_batch_size,
-                            """When more than one gpu is used, then the batch will be splitted across the number of gpus.""")
-
-tf.app.flags.DEFINE_integer('num_parallel_calls', num_parallel_calls, """How many threads to use in input pipeline""")
-tf.app.flags.DEFINE_integer('prefetch_buffer_size', prefetch_buffer, """Number of images to process in a batch.""")
-
-############################### Input Paths ############################################
-
-image_path = "/home/mrc689/Sampled_Dataset"
-
-gt_path = "/home/mrc689/Sampled_Dataset_GT/density_map"
-
-log_path = "/home/mrc689/tf_logs"
-
-image_path = "/u1/mrc689/Sampled_Dataset"
-
-gt_path = "/u1/mrc689/Sampled_Dataset_GT/density_map"
-
-log_path = "/u1/mrc689/tf_logs"
-
-if not os.path.exists(log_path):
-    os.makedirs(log_path)
-
-
-def training_dataset(epochs=5, batch_size=FLAGS.batch_size):
-    train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(image_path, gt_path,
-                                                                                                dataset_train_test_ratio)
+    train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
 
     print(len(train_set_image) , len(train_set_gt))
 
@@ -92,16 +45,10 @@ def training_dataset(epochs=5, batch_size=FLAGS.batch_size):
 
     Batched_dataset_train = Batched_dataset_train \
         .shuffle(buffer_size=4000) \
-        .map(prepare._parse_function,num_parallel_calls=FLAGS.num_parallel_calls) \
-        .batch(batch_size = splitted_batch_size)\
-        .prefetch(buffer_size=FLAGS.prefetch_buffer_size)\
+        .map(prepare._parse_function,num_parallel_calls= args["num_parallel_threads"]) \
+        .batch(batch_size = args["batch_size"])\
+        .prefetch(buffer_size = args["prefetch_buffer"])\
         .repeat()
-
-    # Batched_dataset_train = Batched_dataset_train \
-    #     .shuffle(buffer_size=4000) \
-    #     .map(prepare._parse_function, num_parallel_calls=FLAGS.num_parallel_calls) \
-    #     .batch(batch_size=splitted_batch_size) \
-    #     .repeat()
 
     return Batched_dataset_train
 
@@ -133,14 +80,15 @@ def training_model(input_fn):
     mae = tf.reduce_mean(
         tf.reduce_sum(tf.subtract(sum_of_gt, sum_of_predicted_density_map), axis=[1, 2, 3], keepdims=True))
 
-    # Adding summary to the graph
+    # Adding summary to the graph.
+    # added a small threshold value with mae to prevent NaN to be stored in summary histogram.
     tf.summary.scalar("Mean Squared Error", mae + 1e-8)
     # tf.summary.scalar("loss", cost)
 
     return cost, mae
 
 
-def do_training(update_op, loss, summary):
+def do_training(args, update_op, loss, summary):
     config = tf.ConfigProto(log_device_placement=False, allow_soft_placement=True)
 
     with tf.Session(config=config) as sess:
@@ -148,12 +96,12 @@ def do_training(update_op, loss, summary):
 
         # tf log initialization.
         currenttime = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-        logdir = "{}/run-{}/".format(log_path, currenttime)
+        logdir = "{}/run-{}/".format(args["log_path"], currenttime)
         summary_writer = tf.summary.FileWriter(logdir, sess.graph)
 
         # !!!!!!
         step = 0
-        for step in range(0, FLAGS.max_steps):
+        for step in range(0, args["max_steps"]):
 
             start_time = time.time()
             _, loss_value = sess.run((update_op, loss))
@@ -161,12 +109,10 @@ def do_training(update_op, loss, summary):
             if step % 10 == 0:
                 # num_examples_per_step = FLAGS.batch_size * FLAGS.num_gpus
 
-                num_examples_per_step = FLAGS.batch_size
+                num_examples_per_step = args["batch_size"] * args["num_gpus"]
                 examples_per_sec = num_examples_per_step / duration
 
-                # sec_per_batch = duration / FLAGS.batch_size
-
-                sec_per_batch = duration
+                sec_per_batch = duration / args["num_gpus"]
 
                 format_str = ('%s: step %d, loss = %.2f (%.1f examples/sec; %.3f '
                               'sec/batch)')
@@ -249,15 +195,16 @@ def average_gradients(tower_grads):
     return average_grads
 
 
-def create_parallel_optimization(model_fn, input_fn, optimizer, controller="/cpu:0"):
-#def create_parallel_optimization(model_fn, input_fn, optimizer, controller="/GPU:0"):
+
+def create_parallel_optimization(args,model_fn, input_fn, optimizer, controller="/cpu:0"):
+#def create_parallel_optimization(args,model_fn, input_fn, optimizer, controller="/GPU:0"):
 
     # This function is defined below; it returns a list of device ids like
     # `['/gpu:0', '/gpu:1']`
 
     devices = get_available_gpus()
 
-    devices = devices[:FLAGS.num_gpus]
+    devices = devices[:args["num_gpus"]]
 
     # This list keeps track of the gradients per tower and the losses
     tower_grads = []
@@ -320,7 +267,7 @@ def create_parallel_optimization(model_fn, input_fn, optimizer, controller="/cpu
     return apply_gradient_op, avg_mse, summary_op
 
 
-def parallel_training(model_fn, dataset):
+def parallel_training(args,model_fn, dataset):
     iterator = dataset.make_one_shot_iterator()
 
     def input_fn():
@@ -328,44 +275,52 @@ def parallel_training(model_fn, dataset):
             # remove any device specifications for the input data
             return iterator.get_next()
 
-    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
-    update_op, loss, summary = create_parallel_optimization(model_fn,
+    optimizer = tf.train.AdamOptimizer(learning_rate=args["learning_rate"])
+    update_op, loss, summary = create_parallel_optimization(args,
+                                                            model_fn,
                                                             input_fn,
                                                             optimizer)
 
-    do_training(update_op, loss, summary)
+    do_training(args,update_op, loss, summary)
 
 
 if __name__ == "__main__":
+
+    # The following default values will be used if not provided from the command line arguments.
+    DEFAULT_NUMBER_OF_GPUS = 4
+    DEFAULT_MAXSTEPS = 21000
+    DEFAULT_BATCHSIZE = 64
+    DEFAULT_PARALLEL_THREADS = 8
+    DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 1
+    DEFAULT_IMAGE_PATH = "/home/mrc689/Sampled_Dataset"
+    DEFAULT_GT_PATH = "/home/mrc689/Sampled_Dataset_GT/density_map"
+    DEFAULT_LOG_PATH = "/home/mrc689/tf_logs"
+    DEFAULT_RATIO_TRAINTEST_DATASET = 0.7
+    DEFAULT_LEARNING_RATE = 0.001
+
+
+    # Create arguements to parse
+    ap = argparse.ArgumentParser(description="Script to train the FlowerCounter model using multiGPUs in single node.")
+
+    ap.add_argument("-g", "--num_gpus", required=False, help="How many GPUs to use.",default = DEFAULT_NUMBER_OF_GPUS) 
+    ap.add_argument("-b", "--batch_size", required=False, help="Number of images to process in a batch per GPU",default = DEFAULT_BATCHSIZE)
+    ap.add_argument("-steps", "--max_steps", required=False, help="Maximum number of batches to run.", default = DEFAULT_MAXSTEPS)
+    ap.add_argument("-i", "--image_path", required=False, help="Input path of the images",default = DEFAULT_IMAGE_PATH)
+    ap.add_argument("-gt", "--gt_path", required=False, help="Ground truth path of input images",default = DEFAULT_GT_PATH)
+    ap.add_argument("-num_threads", "--num_parallel_threads", required=False, help="Number of threads to use in parallel for preprocessing elements in input pipeline", default = DEFAULT_PARALLEL_THREADS)
+    ap.add_argument("-l", "--log_path", required=False, help="Path to save the tensorflow log files",default=DEFAULT_LOG_PATH)
+    ap.add_argument("-r", "--dataset_train_test_ratio", required=False, help="Dataset ratio for train and test set .",default = DEFAULT_RATIO_TRAINTEST_DATASET) 
+    ap.add_argument("-pbuff","--prefetch_buffer",required=False,help="An internal buffer to prefetch elements from the input dataset ahead of the time they are requested",default=DEFAULT_PREFETCH_BUFFER_SIZE)
+    ap.add_argument("-lr", "--learning_rate", required=False, help="Default learning rate.",default = DEFAULT_LEARNING_RATE)
+
+    args = vars(ap.parse_args())
+
+
     start_time = time.time()
-
     tf.reset_default_graph()
-    parallel_training(training_model, training_dataset(epochs=3))
 
+    parallel_training(args,training_model, training_dataset(args))
     duration = time.time() - start_time
+
     print("Duration : ", duration)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
