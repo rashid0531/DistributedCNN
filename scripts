@@ -1,0 +1,1 @@
+HOROVOD_CUDA_HOME=/home/mrc689/local/cuda-9.0/ HOROVOD_GPU_ALLREDUCE=NCCL pip install --no-cache-dir horovod
