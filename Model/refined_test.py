@@ -44,7 +44,7 @@ def training_dataset(args):
         lambda img, gt: tf.py_func(prepare.read_npy_file, [img, gt], [img.dtype, tf.float32]))
 
     Batched_dataset_train = Batched_dataset_train \
-        .shuffle(buffer_size=4000) \
+        .shuffle(buffer_size=400) \
         .map(prepare._parse_function,num_parallel_calls= args["num_parallel_threads"]) \
         .batch(batch_size = args["batch_size"])\
         .prefetch(buffer_size = args["prefetch_buffer"])\
@@ -59,10 +59,10 @@ def core_model(input_image):
     return predicted_density_map
 
 
-def training_model(input_fn):
-    inputs = input_fn()
-    image = inputs[0]
-    gt = inputs[1]
+def training_model(input_img, ground_truth):
+
+    image = input_img
+    gt = ground_truth
     predicted_density_map = core_model(image)
 
     # I am planning to train the backpropagation based on the loss between two 4D arrays. But while showcasing the result, the predictibility will be measure based on mse.
@@ -99,7 +99,10 @@ def do_training(args, update_op, loss, summary):
         logdir = "{}/run-{}/".format(args["log_path"], currenttime)
         summary_writer = tf.summary.FileWriter(logdir, sess.graph)
 
-        # !!!!!!
+
+        # Saving the checkpoint
+        saver = tf.train.Saver()
+
         step = 0
         for step in range(0, args["max_steps"]):
 
@@ -136,6 +139,15 @@ def do_training(args, update_op, loss, summary):
                 # chrome_trace = fetched_timeline.generate_chrome_trace_format()
                 # with open('timeline_02_step_%d.json' % step, 'w') as f:
                 #     f.write(chrome_trace)
+
+            if step % 500 == 0:
+                ckptname = "{}/checkpoint@step-{}.ckpt".format(args["checkpoint_path"], step)
+                saver.save(sess,ckptname)
+
+
+        # Saving the final checkpoint
+        ckptname = "{}/checkpoint_after_finalstep.ckpt".format(args["checkpoint_path"], step)
+        saver.save(sess,ckptname)
 
     print('Final loss: {}'.format(loss_value))
 
@@ -212,6 +224,24 @@ def create_parallel_optimization(args,model_fn, input_fn, optimizer, controller=
     losses = []
     mean_squared_err = []
 
+    # Get the next mini batch from the iterator.
+
+    mini_batch = input_fn()
+
+    image_names = mini_batch[0]
+
+    '''
+    with tf.Session() as  sess:
+        output = sess.run(image_names)
+    
+        print(output[0])
+    '''
+
+    #print(type(output[0]))
+    
+    split_batches_imgs = tf.split(mini_batch[1], int(args["num_gpus"]))
+    split_batches_gt = tf.split(mini_batch[2], int(args["num_gpus"]))
+
     # Get the current variable scope so we can reuse all variables we need once we get
     # to the second iteration of the loop below
     with tf.variable_scope(tf.get_variable_scope()) as outer_scope:
@@ -221,7 +251,7 @@ def create_parallel_optimization(args,model_fn, input_fn, optimizer, controller=
             # controller.
             with tf.device(assign_to_device(id, controller)), tf.name_scope(name) as scope:
                 # Compute loss and gradients, but don't apply them yet
-                loss, mse = model_fn(input_fn)
+                loss, mse = model_fn(split_batches_imgs[i],split_batches_gt[i])
 
                 with tf.name_scope("compute_gradients"):
                     # `compute_gradients` returns a list of (gradient, variable) pairs
@@ -298,7 +328,7 @@ if __name__ == "__main__":
     DEFAULT_LOG_PATH = "/home/mrc689/tf_logs"
     DEFAULT_RATIO_TRAINTEST_DATASET = 0.7
     DEFAULT_LEARNING_RATE = 0.00001
-
+    DEFAULT_CHECKPOINT_PATH = "/home/mrc689/tf_ckpt"
 
     # Create arguements to parse
     ap = argparse.ArgumentParser(description="Script to train the FlowerCounter model using multiGPUs in single node.")
@@ -313,7 +343,7 @@ if __name__ == "__main__":
     ap.add_argument("-r", "--dataset_train_test_ratio", required=False, help="Dataset ratio for train and test set .",default = DEFAULT_RATIO_TRAINTEST_DATASET) 
     ap.add_argument("-pbuff","--prefetch_buffer",required=False,help="An internal buffer to prefetch elements from the input dataset ahead of the time they are requested",default=DEFAULT_PREFETCH_BUFFER_SIZE)
     ap.add_argument("-lr", "--learning_rate", required=False, help="Default learning rate.",default = DEFAULT_LEARNING_RATE)
-
+    ap.add_argument("-ckpt_path", "--checkpoint_path", required=False, help="Path to save the Tensorflow model as checkpoint file.",default = DEFAULT_CHECKPOINT_PATH)
     args = vars(ap.parse_args())
 
 

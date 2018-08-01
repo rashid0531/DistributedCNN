@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#python test.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2" \
+#-gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/part2" \
+#-l "/home/mohammed/tf_logs"
+
+
+python refined_test.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2" \
+-gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/part2" \
+-l "/home/mohammed/tf_logs" \
+-ckpt_path "/home/mohammed/tf_ckpt"
+

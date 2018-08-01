@@ -57,12 +57,12 @@ class MCNN():
 
         # 1st Deconvolutional layer
         transposed_conv1 = tf.layers.conv2d_transpose(conv4,filters=properties['conv4'][0], kernel_size=properties['conv4'][1],
-                                 strides=[properties['conv4'][2], properties['conv4'][2]], padding="SAME",
+                                 strides=[2,2], padding="SAME",
                                  activation=tf.nn.relu,name = variable_layer_name + 'deconv1')
 
         # 2nd Deconvolutional layer
         transposed_conv2 = tf.layers.conv2d_transpose(transposed_conv1,filters=properties['conv3'][0], kernel_size=properties['conv3'][1], 
-                                 strides=[properties['conv3'][2], properties['conv3'][2]], padding="SAME",
+                                 strides=[2,2], padding="SAME",
                                  activation=tf.nn.relu,name = variable_layer_name + 'deconv2')
 
 
@@ -101,5 +101,19 @@ def read_image_using_PIL(image):
     # img.show()
     return image
 
+if __name__ == "__main__":
+    
+    X = tf.placeholder(tf.float32, [1, 224, 224, 3])
+    ob1 = MCNN(X)
+    
+    input_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2/1237-0725/frame000001_0_0.jpg"
 
+    image = read_image_using_PIL(input_path)
+
+    with tf.Session() as sess:
+    # Initialize all variables
+        sess.run(tf.global_variables_initializer())
+        output = sess.run(ob1.final_layer_output,feed_dict={X: [image]})
+    # # #
+    print(np.shape(output))
 

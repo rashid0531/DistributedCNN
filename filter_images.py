@@ -1,10 +1,7 @@
 import glob
 import pickle
 import itertools
-import config as config
-import tensorflow as tf
-import numpy as np
-import cv2
+
 
 def filter_item(directory):
     '''
@@ -21,57 +18,26 @@ def filter_item(directory):
             image_name,camera_id = (each_image.split("/")[-1]).split("_")[0], (each_image.split("/")[-2])
             image_name = int(image_name.replace("frame",""))
 
-            # if camera_id.split('-')[0] == '1109':
-#
-#                 dict= {}
-#
-#                 days_to_look_for = ['0706','0712']
-#
-#                 if camera_id.split('-')[1] in days_to_look_for:
-#
-#                     if (image_name >= 250 and image_name<= 1329):
-#
-#                         dict['camera_id'] = '1109'
-#                         dict['capturing_day'] = camera_id.split('-')[1]
-#                         dict['image_name'] = each_image
-#                         cameraid_capturing_days.append(dict)
-
-            """
             if camera_id.split('-')[0] == '1109':
 
-                 dict= {}
+                dict= {}
 
-                 days_to_look_for = ['0803','0805']
+                days_to_look_for = ['0706','0712']
 
-                 if camera_id.split('-')[1] in days_to_look_for:
+                if camera_id.split('-')[1] in days_to_look_for:
 
-                     if (image_name <= 950):
+                    if (image_name >= 250 and image_name<= 1329):
 
-                         dict['camera_id'] = '1109'
-                         dict['capturing_day'] = camera_id.split('-')[1]
-                         dict['image_name'] = each_image
-                         cameraid_capturing_days.append(dict)
+                        dict['camera_id'] = '1109'
+                        dict['capturing_day'] = camera_id.split('-')[1]
+                        dict['image_name'] = each_image
+                        cameraid_capturing_days.append(dict)
 
-                 dict= {}
-
-                 days_to_look_for = ['0802']
-
-                 if camera_id.split('-')[1] in days_to_look_for:
-
-                     if (image_name <= 690):
-
-                         dict['camera_id'] = '1109'
-                         dict['capturing_day'] = camera_id.split('-')[1]
-                         dict['image_name'] = each_image
-                         cameraid_capturing_days.append(dict)
-
-            """
             if camera_id.split('-')[0] == '1237':
 
                 dict = {}
 
-                days_to_look_for = ['0725']
-                #days_to_look_for = ['0715', '0720', '0725']
+                days_to_look_for = ['0715', '0720', '0725']
 
                 if camera_id.split('-')[1] in days_to_look_for:
 
@@ -125,17 +91,17 @@ def remove_missing_gt(img_list, gt_list):
 
 
 def get_train_test_DataSet(image_path,gt_path,ratio):
-    
+
     """
-    Given input images and their ground truth, this function first filters unnecessary images ang gts. Then it checks if there are same number of input images 
-    as the ground truths. If not then removes the not matching pairs and then sends us the training and testing set based on the ratio provided from the parameteres 
-    being passed. 
-      
+    Given input images and their ground truth, this function first filters unnecessary images ang gts. Then it checks if there are same number of input images
+    as the ground truths. If not then removes the not matching pairs and then sends us the training and testing set based on the ratio provided from the parameteres
+    being passed.
+
     :param image_path: The directory that contains the input images. Images are expected to be stored in multiple directory.
     :param gt_path: The directory that contains the corresponding ground truth density map for input images.
     :return: lists of train and test dataset
     """
-    
+
     filtered_image_dataset = []
     filtered_gt_dataset = []
 
@@ -163,10 +129,6 @@ def get_train_test_DataSet(image_path,gt_path,ratio):
 
                 msg = "Couldn't find the density maps for the following images for camera-id: {} , day: {}".format(
                     ids[i].split('-')[0], ids[i].split('-')[1])
-                print(msg)
-
-                culprits = find_them(img_list=filtered_img, gt_list=filtered_gt)
-                print(culprits)
                 # print(msg)
 
                 culprits = find_them(img_list=filtered_img, gt_list=filtered_gt)
@@ -194,50 +156,42 @@ def get_train_test_DataSet(image_path,gt_path,ratio):
     filtered_image_dataset = sorted(filtered_image_dataset, key=lambda k: k['image_name'])
     filtered_gt_dataset = sorted(filtered_gt_dataset, key=lambda k: k['image_name'])
 
+
     # Filtering only the image name from the each dictionary.
     filtered_image_dataset = list(map(lambda x: x['image_name'],filtered_image_dataset))
     filtered_gt_dataset = list(map(lambda x: x['image_name'],filtered_gt_dataset))
 
+    print(filtered_image_dataset[0:2])
+
     trainset_limit = int(len(filtered_image_dataset) * ratio)
-    
+
     train_img_set = filtered_image_dataset[:trainset_limit]
     train_gt_set = filtered_gt_dataset[:trainset_limit]
     test_img_set = filtered_image_dataset[trainset_limit:]
     test_gt_set = filtered_gt_dataset[trainset_limit:]
-    
+
     return train_img_set,train_gt_set,test_img_set,test_gt_set
 
 
-def read_npy_file(image_name,item):
 
 
-    # The ground truth density map needs to be downsampled because after beign processed through the MAX-POOL layers the input is downsized in half for each MAX-POOL layer.
-    data = np.load(item.decode())
+if __name__ == "__main__":
 
-    original_height = int(config.input_image_height)
-    original_width =  int(config.input_image_width)
-    # Removed the downsampling because in the modified version I have used deconvolution layers twice.
-    # width =  int(original_width/4)
-    # height = int(original_height/4)
-    width =  int(original_width)
-    height = int(original_height)
-    
-    data = cv2.resize(data, (width, height))
-    data = data * ((original_width * original_height) / (width * height))
-
-    # !!!!!!!!!!!!!!!! This reshaping doesn't need to be done if the density map is multichanneled. !!!!!!!!!!!!!!!!!!!!!!
-    data = np.reshape(data, [data.shape[1], data.shape[0], 1])
-    return image_name,data.astype(np.float32)
+    img_path = "/u1/rashid/FlowerCounter_Dataset"
+    gt_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/density_map"
+    get_train_test_DataSet(img_path,gt_path,0.7)
 
 
+    # for i in range (0,len(filtered_image_dataset)):
+    #     tmp_dict = filtered_image_dataset[i]
+    #     tmp_dict['gt_npy'] = filtered_gt_dataset[i]['image_name']
+    #     filtered_image_dataset[i] = tmp_dict
+    # gt_path
+    # output = open('dataset.pkl', 'wb')
+    #
+    # for i in range(0, len(filtered_image_dataset)):
+    #     pickle.dump(filtered_image_dataset[i], output)
+    #
+    # output.close()
 
-def _parse_function(image_path,groundTruth_path):
 
-    image_string = tf.read_file(image_path)
-    image_decoded = tf.image.decode_jpeg(image_string, channels=config.input_image_channels)
-    image_normalized = tf.image.per_image_standardization(image_decoded)
-    # Due to the variable size of input images, resizing was done to scale all images into a fix size.
-    image_resized = tf.image.resize_images(image_normalized, [config.input_image_width, config.input_image_height])
-    image = tf.cast(image_resized, tf.float32)
-
-    return image_path,image,groundTruth_path

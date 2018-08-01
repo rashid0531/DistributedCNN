@@ -6,8 +6,8 @@ input_image_height = 224
 # predicted_density_map_width  = 56
 # predicted_density_map_height = 56
 
-ground_truth_width = 56
-ground_truth_height = 56
+#ground_truth_width = 56
+#ground_truth_height = 56
 
 # Only greyscale channel was used as the author of the MCNN repository converted the RGB image into greyscale image.
 input_image_channels = 3
