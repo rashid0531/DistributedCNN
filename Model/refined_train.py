@@ -30,43 +30,30 @@ def training_dataset(args):
 
     train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
     
-
-    print(args["image_path"])
-    # print(len(train_set_image) , len(train_set_gt))
+    #print(len(train_set_image) , len(train_set_gt))
 
     # A vector of filenames for trainset.
     images_input_train = tf.constant(train_set_image)
     images_gt_train = tf.constant(train_set_gt)
 
-    # A vector of filenames for testset
-    images_input_test = tf.constant(test_set_image) 
-    images_gt_test = tf.constant(test_set_gt)
-    
     dataset_train = tf.data.Dataset.from_tensor_slices((images_input_train, images_gt_train))
     # At time of this writing Tensorflow doesn't support a mixture of user defined python function with tensorflow operations.
     # So we can't use one py_func to process data using tenosrflow operation and nontensorflow operation.
-
-    dataset_test = tf.data.Dataset.from_tensor_slices((images_input_test, images_gt_test))
 
     # Train Set
     Batched_dataset_train = dataset_train.map(
         lambda img, gt: tf.py_func(prepare.read_npy_file, [img, gt], [img.dtype, tf.float32]))
 
     Batched_dataset_train = Batched_dataset_train \
-        .shuffle(buffer_size=400) \
+        .shuffle(buffer_size=500) \
         .map(prepare._parse_function,num_parallel_calls= args["num_parallel_threads"]) \
         .batch(batch_size = args["batch_size"])\
         .prefetch(buffer_size = args["prefetch_buffer"])\
-        .repeat()
-
-    # Test Set
-    #Batched_dataset_test = dataset_test.map(
-        #lambda img, gt: tf.py_func(prepare.read_npy_file, [img, gt], [img.dtype, tf.float32]))
+        .repeat(args["number_of_epoch"])
 
 
     return Batched_dataset_train
 
-    #return Batched_dataset_train, Batched_dataset_test
 
 
 def core_model(input_image):
@@ -128,7 +115,7 @@ def do_training(args, update_op, loss, summary):
         saver = tf.train.Saver()
 
         step = 0
-        for step in range(0, args["max_steps"]):
+        while(True):
 
             start_time = time.time()
             _, loss_value = sess.run((update_op, loss))
@@ -137,7 +124,7 @@ def do_training(args, update_op, loss, summary):
             if step % 10 == 0:
                 # num_examples_per_step = FLAGS.batch_size * FLAGS.num_gpus
 
-                num_examples_per_step = args["batch_size"] * args["num_gpus"]
+                num_examples_per_step = args["batch_size"]
                 examples_per_sec = num_examples_per_step / duration
 
                 sec_per_batch = duration / args["num_gpus"]
@@ -168,6 +155,7 @@ def do_training(args, update_op, loss, summary):
                 ckptname = "{}/checkpoint@step-{}.ckpt".format(args["checkpoint_path"], step)
                 saver.save(sess,ckptname)
 
+            step+=1
 
         # Saving the final checkpoint
         ckptname = "{}/checkpoint_after_finalstep.ckpt".format(args["checkpoint_path"], step)
@@ -342,10 +330,12 @@ if __name__ == "__main__":
 
     # The following default values will be used if not provided from the command line arguments.
     DEFAULT_NUMBER_OF_GPUS = 1
-    DEFAULT_MAXSTEPS = 21000
-    DEFAULT_BATCHSIZE = 32
+    DEFAULT_EPOCH = 75
+    # DEFAULT_MAXSTEPS = 20
+    DEFAULT_BATCHSIZE_PER_GPU = 32
+    DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
     DEFAULT_PARALLEL_THREADS = 8
-    DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 1
+    DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 2
     DEFAULT_IMAGE_PATH = "/home/mrc689/Sampled_Dataset"
     DEFAULT_GT_PATH = "/home/mrc689/Sampled_Dataset_GT/density_map"
     DEFAULT_LOG_PATH = "/home/mrc689/tf_logs"
@@ -356,9 +346,11 @@ if __name__ == "__main__":
     # Create arguements to parse
     ap = argparse.ArgumentParser(description="Script to train the FlowerCounter model using multiGPUs in single node.")
 
-    ap.add_argument("-g", "--num_gpus", required=False, help="How many GPUs to use.",default = DEFAULT_NUMBER_OF_GPUS) 
-    ap.add_argument("-b", "--batch_size", required=False, help="Number of images to process in a batch per GPU",default = DEFAULT_BATCHSIZE)
-    ap.add_argument("-steps", "--max_steps", required=False, help="Maximum number of batches to run.", default = DEFAULT_MAXSTEPS)
+    ap.add_argument("-g", "--num_gpus", required=False, help="How many GPUs to use.",default = DEFAULT_NUMBER_OF_GPUS)
+    ap.add_argument("-e", "--number_of_epoch", required=False, help="Number of epochs",default = DEFAULT_EPOCH)
+    ap.add_argument("-b", "--batch_size", required=False, help="Number of images to process in a minibatch",default = DEFAULT_BATCHSIZE)
+    ap.add_argument("-gb", "--batch_size_per_GPU", required=False, help="Number of images to process in a batch per GPU",default = DEFAULT_BATCHSIZE_PER_GPU)
+    # ap.add_argument("-steps", "--max_steps", required=False, help="Maximum number of batches to run.", default = DEFAULT_MAXSTEPS)
     ap.add_argument("-i", "--image_path", required=False, help="Input path of the images",default = DEFAULT_IMAGE_PATH)
     ap.add_argument("-gt", "--gt_path", required=False, help="Ground truth path of input images",default = DEFAULT_GT_PATH)
     ap.add_argument("-num_threads", "--num_parallel_threads", required=False, help="Number of threads to use in parallel for preprocessing elements in input pipeline", default = DEFAULT_PARALLEL_THREADS)
@@ -368,6 +360,7 @@ if __name__ == "__main__":
     ap.add_argument("-lr", "--learning_rate", required=False, help="Default learning rate.",default = DEFAULT_LEARNING_RATE)
     ap.add_argument("-ckpt_path", "--checkpoint_path", required=False, help="Path to save the Tensorflow model as checkpoint file.",default = DEFAULT_CHECKPOINT_PATH)
     args = vars(ap.parse_args())
+
 
 
     start_time = time.time()

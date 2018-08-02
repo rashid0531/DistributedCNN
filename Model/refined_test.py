@@ -30,7 +30,7 @@ def training_dataset(args):
 
     train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
     
-    # print(len(train_set_image) , len(train_set_gt))
+    print(len(test_set_image) , len(test_set_gt))
 
     # A vector of filenames for testset
     images_input_test = tf.constant(test_set_image) 
@@ -70,10 +70,10 @@ def training_model(input_img, ground_truth):
 
     relative_error = tf.divide(tf.abs(tf.subtract(sum_of_predicted_density_map , sum_of_gt)), sum_of_gt)
 
-    return relative_error
+    return relative_error, sum_of_gt, sum_of_predicted_density_map
 
 
-def do_training(args,loss,image_names):
+def do_training(args,loss,image_names,ground_truth, predictions):
     
     config = tf.ConfigProto(log_device_placement=False, allow_soft_placement=True)
     # Add ops to save and restore all the variables.
@@ -81,23 +81,57 @@ def do_training(args,loss,image_names):
 
     with tf.Session(config=config) as sess:
         
-        saver.restore(sess, "/home/mohammed/tf_ckpt/checkpoint@step-3000.ckpt")
+        saver.restore(sess, "/home/mohammed/tf_ckpt/checkpoint@step-19000.ckpt")
 
         # tf log initialization.
         currenttime = datetime.utcnow().strftime("%Y%m%d%H%M%S")
         logdir = "{}/run-{}/".format(args["log_path"], currenttime)
         summary_writer = tf.summary.FileWriter(logdir, sess.graph)
 
+
+        logs = []
+
         step = 0
         for step in range(0, args["max_steps"]):
 
             start_time = time.time()
-            loss_value, img_names = sess.run([loss,image_names])
+            loss_value, img_names, original_count, predicted_count = sess.run([loss,image_names, ground_truth, predictions])
             loss_value = np.array(loss_value)
             img_names = np.array(img_names)
-            print(loss_value.shape)
+            original_count = np.array(original_count)
+            predicted_count = np.array(predicted_count)
+            
+            #print(original_count.shape, predicted_count.shape)
 
-            duration = time.time() - start_time
+            shape = img_names.shape
+           
+            for gpu_id in range(0,shape[0]):
+                
+                for img in range(0,shape[1]):
+                    
+                    img_names[gpu_id][img] = str(img_names[gpu_id][img])
+                    img_prefix = img_names[gpu_id][img].split('/')[-2:]
+                    img_prefix = '/'.join(img_prefix)
+
+                    output = "IMG: {}, Original Count: {:07.4f}, Predicted Count: {:07.4f}, Relative Error: {:07.4f}" \
+                             .format(img_prefix, original_count[gpu_id][img], predicted_count[gpu_id][img], loss_value[gpu_id][img]) 
+            
+                    logs.append(output)
+
+                    """
+                    print("IMG: ", img_prefix,
+                          "Original Count: %.3f ," %original_count[gpu_id][img], 
+                          "Predicted Count: %.3f ," % predicted_count[gpu_id][img],
+                          "Relative Error: %.3f" %loss_value[gpu_id][img])
+                    """
+                    print(output)
+
+        duration = time.time() - start_time
+
+        with open("output.txt","w+") as file_object:
+            for i in range(0,len(logs)):
+                file_object.write(logs[i]+"\n")
+         
 
 
 PS_OPS = [
@@ -135,6 +169,8 @@ def evaluate_test_set(args,model_fn,input_fn,controller="/cpu:0"):
     devices = devices[:args["num_gpus"]]
 
     relative_err = []
+    ground_truth = []
+    predictions = []
 
     # Get the next mini batch from the iterator.
 
@@ -156,7 +192,7 @@ def evaluate_test_set(args,model_fn,input_fn,controller="/cpu:0"):
             # controller.
             with tf.device(assign_to_device(id, controller)), tf.name_scope(name) as scope:
                 # Compute relative error
-                re = model_fn(split_batches_imgs[i],split_batches_gt[i])
+                re , gt , prediction = model_fn(split_batches_imgs[i],split_batches_gt[i])
 
                 # Gradient computation should be turned off for testing dataset as I dont want to train the model from the testing dataset. 
                 """
@@ -166,6 +202,8 @@ def evaluate_test_set(args,model_fn,input_fn,controller="/cpu:0"):
                     tower_grads.append(grads)
                 """
                 relative_err.append(re)
+                ground_truth.append(gt)
+                predictions.append(prediction)
 
             # After the first iteration, we want to reuse the variables.
             outer_scope.reuse_variables()
@@ -173,8 +211,11 @@ def evaluate_test_set(args,model_fn,input_fn,controller="/cpu:0"):
     # relative_err is 5 dimentional. 
     # The first index indicates the GPU ID from which the result was generated, the second one is the batch id, the third ,fourth and fifth  are the height,width and channels respectively.           
 
-    relative_err = tf.reshape(relative_err,[args["num_gpus"], args["batch_size_per_GPU"], 1])
-    return relative_err,split_batches_img_names
+    relative_err = tf.reshape(relative_err,[args["num_gpus"], -1])
+    ground_truth = tf.reshape(ground_truth,[args["num_gpus"], -1])
+    predictions = tf.reshape(predictions,[args["num_gpus"], -1])
+
+    return relative_err,split_batches_img_names, ground_truth, predictions
 
 
 def parallel_training(args,model_fn, dataset):
@@ -188,16 +229,16 @@ def parallel_training(args,model_fn, dataset):
     # No optimizer is needed for testing phase.
     #optimizer = tf.train.AdamOptimizer(learning_rate=args["learning_rate"])
     
-    loss, image_names = evaluate_test_set(args,model_fn,input_fn)
+    loss, image_names, ground_truth, predictions = evaluate_test_set(args,model_fn,input_fn)
 
-    do_training(args,loss,image_names)
+    do_training(args,loss,image_names, ground_truth, predictions)
 
 
 if __name__ == "__main__":
 
     # The following default values will be used if not provided from the command line arguments.
     DEFAULT_NUMBER_OF_GPUS = 1
-    DEFAULT_MAXSTEPS = 21000
+    DEFAULT_MAXSTEPS = 3648
     DEFAULT_BATCHSIZE_PER_GPU = 32
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
     DEFAULT_PARALLEL_THREADS = 8
