@@ -73,7 +73,7 @@ def training_model(input_img, ground_truth):
     return relative_error
 
 
-def do_training(args,loss):
+def do_training(args,loss,image_names):
     
     config = tf.ConfigProto(log_device_placement=False, allow_soft_placement=True)
     # Add ops to save and restore all the variables.
@@ -92,25 +92,13 @@ def do_training(args,loss):
         for step in range(0, args["max_steps"]):
 
             start_time = time.time()
-            loss_value = sess.run((loss))
+            loss_value, img_names = sess.run([loss,image_names])
             loss_value = np.array(loss_value)
-            print(loss_value)
+            img_names = np.array(img_names)
+            print(loss_value.shape)
 
             duration = time.time() - start_time
-            """
-            if step % 10 == 0:
-                # num_examples_per_step = FLAGS.batch_size * FLAGS.num_gpus
 
-                num_examples_per_step = args["batch_size"] * args["num_gpus"]
-                examples_per_sec = num_examples_per_step / duration
-
-                sec_per_batch = duration / args["num_gpus"]
-
-                format_str = ('%s: step %d, loss = %.2f (%.1f examples/sec; %.3f '
-                              'sec/batch)')
-                print(format_str % (datetime.now(), step, loss_value,
-                                    examples_per_sec, sec_per_batch))
-             """
 
 PS_OPS = [
     'Variable', 'VariableV2', 'AutoReloadVariable', 'MutableHashTable',
@@ -152,10 +140,10 @@ def evaluate_test_set(args,model_fn,input_fn,controller="/cpu:0"):
 
     mini_batch = input_fn()
 
-    image_names = mini_batch[0]
+    #image_names = mini_batch[0]
 
     #print(type(output[0]))
-    
+    split_batches_img_names = tf.split(mini_batch[0], int(args["num_gpus"])) 
     split_batches_imgs = tf.split(mini_batch[1], int(args["num_gpus"]))
     split_batches_gt = tf.split(mini_batch[2], int(args["num_gpus"]))
 
@@ -186,7 +174,7 @@ def evaluate_test_set(args,model_fn,input_fn,controller="/cpu:0"):
     # The first index indicates the GPU ID from which the result was generated, the second one is the batch id, the third ,fourth and fifth  are the height,width and channels respectively.           
 
     relative_err = tf.reshape(relative_err,[args["num_gpus"], args["batch_size_per_GPU"], 1])
-    return relative_err
+    return relative_err,split_batches_img_names
 
 
 def parallel_training(args,model_fn, dataset):
@@ -200,9 +188,9 @@ def parallel_training(args,model_fn, dataset):
     # No optimizer is needed for testing phase.
     #optimizer = tf.train.AdamOptimizer(learning_rate=args["learning_rate"])
     
-    loss = evaluate_test_set(args,model_fn,input_fn)
+    loss, image_names = evaluate_test_set(args,model_fn,input_fn)
 
-    do_training(args,loss)
+    do_training(args,loss,image_names)
 
 
 if __name__ == "__main__":
