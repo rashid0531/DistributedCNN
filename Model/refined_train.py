@@ -30,26 +30,43 @@ def training_dataset(args):
 
     train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
     
+
+    print(args["image_path"])
     # print(len(train_set_image) , len(train_set_gt))
+
+    # A vector of filenames for trainset.
+    images_input_train = tf.constant(train_set_image)
+    images_gt_train = tf.constant(train_set_gt)
 
     # A vector of filenames for testset
     images_input_test = tf.constant(test_set_image) 
     images_gt_test = tf.constant(test_set_gt)
     
+    dataset_train = tf.data.Dataset.from_tensor_slices((images_input_train, images_gt_train))
     # At time of this writing Tensorflow doesn't support a mixture of user defined python function with tensorflow operations.
     # So we can't use one py_func to process data using tenosrflow operation and nontensorflow operation.
 
     dataset_test = tf.data.Dataset.from_tensor_slices((images_input_test, images_gt_test))
-    Batched_dataset_test = dataset_test.map(
+
+    # Train Set
+    Batched_dataset_train = dataset_train.map(
         lambda img, gt: tf.py_func(prepare.read_npy_file, [img, gt], [img.dtype, tf.float32]))
 
-    Batched_dataset_test = Batched_dataset_test \
+    Batched_dataset_train = Batched_dataset_train \
+        .shuffle(buffer_size=400) \
         .map(prepare._parse_function,num_parallel_calls= args["num_parallel_threads"]) \
         .batch(batch_size = args["batch_size"])\
         .prefetch(buffer_size = args["prefetch_buffer"])\
         .repeat()
 
-    return Batched_dataset_test
+    # Test Set
+    #Batched_dataset_test = dataset_test.map(
+        #lambda img, gt: tf.py_func(prepare.read_npy_file, [img, gt], [img.dtype, tf.float32]))
+
+
+    return Batched_dataset_train
+
+    #return Batched_dataset_train, Batched_dataset_test
 
 
 def core_model(input_image):
@@ -64,40 +81,59 @@ def training_model(input_img, ground_truth):
     gt = ground_truth
     predicted_density_map = core_model(image)
 
-    # Evaluation of the model is calculated using relative error.
+    
+    # The cost is measured as the eucledian distance between the pixels of Ground truth and predicted density maps.
+    # I am planning to train the backpropagation based on the cost between two 4D arrays. But while showcasing the result, the predictibility will be measure based on mse.
+    # Because from my understanding this is what the author did in the paper MCNN.
+    cost = tf.reduce_mean(
+            tf.sqrt(
+            tf.reduce_sum(
+            tf.square(
+            tf.subtract(gt, predicted_density_map)), axis=[1, 2, 3], keepdims=True)))
+
+    # cost = tf.losses.mean_squared_error(gt, predicted_density_map)
+    # loss = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=label, logits=logits)
+
     sum_of_gt = tf.reduce_sum(gt, axis=[1, 2, 3], keepdims=True)
     sum_of_predicted_density_map = tf.reduce_sum(predicted_density_map, axis=[1, 2, 3], keepdims=True)
 
-    relative_error = tf.divide(tf.abs(tf.subtract(sum_of_predicted_density_map , sum_of_gt)), sum_of_gt)
+    mse = tf.sqrt(tf.reduce_mean(tf.square(sum_of_gt - sum_of_predicted_density_map)))
 
-    return relative_error
+    # Changed the mean abosolute error.
+    mae = tf.reduce_mean(
+        tf.reduce_sum(tf.abs(tf.subtract(sum_of_gt, sum_of_predicted_density_map)), axis=[1, 2, 3], keepdims=True))
+
+    # Adding summary to the graph.
+    # added a small threshold value with mae to prevent NaN to be stored in summary histogram.
+    #tf.summary.scalar("Mean Squared Error", mse)
+    tf.summary.scalar("Mean Absolute Error", mae)
+
+    # tf.summary.scalar("loss", cost)
+
+    return cost, mae
 
 
-def do_training(args,loss):
-    
+def do_training(args, update_op, loss, summary):
     config = tf.ConfigProto(log_device_placement=False, allow_soft_placement=True)
-    # Add ops to save and restore all the variables.
-    saver = tf.train.Saver()
 
     with tf.Session(config=config) as sess:
-        
-        saver.restore(sess, "/home/mohammed/tf_ckpt/checkpoint@step-3000.ckpt")
+        sess.run(tf.global_variables_initializer())
 
         # tf log initialization.
         currenttime = datetime.utcnow().strftime("%Y%m%d%H%M%S")
         logdir = "{}/run-{}/".format(args["log_path"], currenttime)
         summary_writer = tf.summary.FileWriter(logdir, sess.graph)
 
+        # Saving the checkpoint
+        saver = tf.train.Saver()
+
         step = 0
         for step in range(0, args["max_steps"]):
 
             start_time = time.time()
-            loss_value = sess.run((loss))
-            loss_value = np.array(loss_value)
-            print(loss_value)
+            _, loss_value = sess.run((update_op, loss))
 
             duration = time.time() - start_time
-            """
             if step % 10 == 0:
                 # num_examples_per_step = FLAGS.batch_size * FLAGS.num_gpus
 
@@ -110,7 +146,35 @@ def do_training(args,loss):
                               'sec/batch)')
                 print(format_str % (datetime.now(), step, loss_value,
                                     examples_per_sec, sec_per_batch))
-             """
+
+            if step % 20 == 0:
+                run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)
+                run_metadata = tf.RunMetadata()
+
+                summary_str = sess.run(summary,
+                                       options=run_options,
+                                       run_metadata=run_metadata)
+
+                summary_writer.add_run_metadata(run_metadata, 'step%d' % step)
+                summary_writer.add_summary(summary_str, step)
+                # print('Adding run metadata for', step)
+
+                # fetched_timeline = timeline.Timeline(run_metadata.step_stats)
+                # chrome_trace = fetched_timeline.generate_chrome_trace_format()
+                # with open('timeline_02_step_%d.json' % step, 'w') as f:
+                #     f.write(chrome_trace)
+
+            if step % 500 == 0:
+                ckptname = "{}/checkpoint@step-{}.ckpt".format(args["checkpoint_path"], step)
+                saver.save(sess,ckptname)
+
+
+        # Saving the final checkpoint
+        ckptname = "{}/checkpoint_after_finalstep.ckpt".format(args["checkpoint_path"], step)
+        saver.save(sess,ckptname)
+
+    print('Final loss: {}'.format(loss_value))
+
 
 PS_OPS = [
     'Variable', 'VariableV2', 'AutoReloadVariable', 'MutableHashTable',
@@ -140,19 +204,61 @@ def assign_to_device(device, ps_device):
     return _assign
 
 
-def evaluate_test_set(args,model_fn,input_fn,controller="/cpu:0"):
-   
+# Source:
+# https://github.com/tensorflow/models/blob/master/tutorials/image/cifar10/cifar10_multi_gpu_train.py#L101
+def average_gradients(tower_grads):
+    """Calculate the average gradient for each shared variable across all towers.
+    Note that this function provides a synchronization point across all towers.
+    Args:
+    tower_grads: List of lists of (gradient, variable) tuples. The outer list ranges
+        over the devices. The inner list ranges over the different variables.
+    Returns:
+            List of pairs of (gradient, variable) where the gradient has been averaged
+            across all towers.
+    """
+    average_grads = []
+    for grad_and_vars in zip(*tower_grads):
+        # Note that each grad_and_vars looks like the following:
+        #   ((grad0_gpu0, var0_gpu0), ... , (grad0_gpuN, var0_gpuN))
+        grads = [g for g, _ in grad_and_vars]
+        grad = tf.reduce_mean(grads, 0)
+
+        # Keep in mind that the Variables are redundant because they are shared
+        # across towers. So .. we will just return the first tower's pointer to
+        # the Variable.
+        v = grad_and_vars[0][1]
+        grad_and_var = (grad, v)
+        average_grads.append(grad_and_var)
+    return average_grads
+
+
+def create_parallel_optimization(args,model_fn, input_fn, optimizer, controller="/cpu:0"):
+#def create_parallel_optimization(args,model_fn, input_fn, optimizer, controller="/GPU:0"):
+
+    # This function is defined below; it returns a list of device ids like
+    # `['/gpu:0', '/gpu:1']`
+
     devices = get_available_gpus()
 
     devices = devices[:args["num_gpus"]]
 
-    relative_err = []
+    # This list keeps track of the gradients per tower and the losses
+    tower_grads = []
+    losses = []
+    mean_absolute_err = []
 
     # Get the next mini batch from the iterator.
 
     mini_batch = input_fn()
 
     image_names = mini_batch[0]
+
+    '''
+    with tf.Session() as  sess:
+        output = sess.run(image_names)
+    
+        print(output[0])
+    '''
 
     #print(type(output[0]))
     
@@ -167,26 +273,52 @@ def evaluate_test_set(args,model_fn,input_fn,controller="/cpu:0"):
             # Use the assign_to_device function to ensure that variables are created on the
             # controller.
             with tf.device(assign_to_device(id, controller)), tf.name_scope(name) as scope:
-                # Compute relative error
-                re = model_fn(split_batches_imgs[i],split_batches_gt[i])
+                # Compute loss and gradients, but don't apply them yet
+                loss, mae = model_fn(split_batches_imgs[i],split_batches_gt[i])
 
-                # Gradient computation should be turned off for testing dataset as I dont want to train the model from the testing dataset. 
-                """
                 with tf.name_scope("compute_gradients"):
                     # `compute_gradients` returns a list of (gradient, variable) pairs
                     grads = optimizer.compute_gradients(loss)
                     tower_grads.append(grads)
-                """
-                relative_err.append(re)
+
+                losses.append(loss)
+                mean_absolute_err.append(mae)
 
             # After the first iteration, we want to reuse the variables.
             outer_scope.reuse_variables()
 
-    # relative_err is 5 dimentional. 
-    # The first index indicates the GPU ID from which the result was generated, the second one is the batch id, the third ,fourth and fifth  are the height,width and channels respectively.           
+            # Retain the summaries from the final tower.
+            summaries = tf.get_collection(tf.GraphKeys.SUMMARIES, scope)
 
-    relative_err = tf.reshape(relative_err,[args["num_gpus"], args["batch_size_per_GPU"], 1])
-    return relative_err
+    # Apply the gradients on the controlling device
+    with tf.name_scope("apply_gradients"), tf.device(controller):
+        # Note that what we are doing here mathematically is equivalent to returning the
+        # average loss over the towers and compute the gradients relative to that.
+        # Unfortunately, this would place all gradient-computations on one device, which is
+        # why we had to compute the gradients above per tower and need to average them here.
+
+        # This function is defined below; it takes the list of (gradient, variable) lists
+        # and turns it into a single (gradient, variables) list.
+        gradients = average_gradients(tower_grads)
+        global_step = tf.train.get_or_create_global_step()
+
+        apply_gradient_op = optimizer.apply_gradients(gradients, global_step)
+
+
+        # !!!!!!!
+
+    # Add histograms for trainable variables.
+    for var in tf.trainable_variables():
+        summaries.append(tf.summary.histogram(var.op.name, var))
+
+    avg_loss = tf.reduce_mean(losses)
+    avg_mae = tf.reduce_mean(mean_absolute_err)
+
+    # !!!!!!!
+    # Build the summary operation from the last tower summaries.
+    summary_op = tf.summary.merge(summaries)
+
+    return apply_gradient_op, avg_mae, summary_op
 
 
 def parallel_training(args,model_fn, dataset):
@@ -197,12 +329,13 @@ def parallel_training(args,model_fn, dataset):
             # remove any device specifications for the input data
             return iterator.get_next()
 
-    # No optimizer is needed for testing phase.
-    #optimizer = tf.train.AdamOptimizer(learning_rate=args["learning_rate"])
-    
-    loss = evaluate_test_set(args,model_fn,input_fn)
+    optimizer = tf.train.AdamOptimizer(learning_rate=args["learning_rate"])
+    update_op, loss, summary = create_parallel_optimization(args,
+                                                            model_fn,
+                                                            input_fn,
+                                                            optimizer)
 
-    do_training(args,loss)
+    do_training(args,update_op, loss, summary)
 
 
 if __name__ == "__main__":
@@ -210,8 +343,7 @@ if __name__ == "__main__":
     # The following default values will be used if not provided from the command line arguments.
     DEFAULT_NUMBER_OF_GPUS = 1
     DEFAULT_MAXSTEPS = 21000
-    DEFAULT_BATCHSIZE_PER_GPU = 32
-    DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
+    DEFAULT_BATCHSIZE = 32
     DEFAULT_PARALLEL_THREADS = 8
     DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 1
     DEFAULT_IMAGE_PATH = "/home/mrc689/Sampled_Dataset"
@@ -224,9 +356,8 @@ if __name__ == "__main__":
     # Create arguements to parse
     ap = argparse.ArgumentParser(description="Script to train the FlowerCounter model using multiGPUs in single node.")
 
-    ap.add_argument("-g", "--num_gpus", required=False, help="How many GPUs to use.",default = DEFAULT_NUMBER_OF_GPUS)
-    ap.add_argument("-b", "--batch_size", required=False, help="Number of images to process in a minibatch",default = DEFAULT_BATCHSIZE)
-    ap.add_argument("-gb", "--batch_size_per_GPU", required=False, help="Number of images to process in a batch per GPU",default = DEFAULT_BATCHSIZE_PER_GPU)
+    ap.add_argument("-g", "--num_gpus", required=False, help="How many GPUs to use.",default = DEFAULT_NUMBER_OF_GPUS) 
+    ap.add_argument("-b", "--batch_size", required=False, help="Number of images to process in a batch per GPU",default = DEFAULT_BATCHSIZE)
     ap.add_argument("-steps", "--max_steps", required=False, help="Maximum number of batches to run.", default = DEFAULT_MAXSTEPS)
     ap.add_argument("-i", "--image_path", required=False, help="Input path of the images",default = DEFAULT_IMAGE_PATH)
     ap.add_argument("-gt", "--gt_path", required=False, help="Ground truth path of input images",default = DEFAULT_GT_PATH)
