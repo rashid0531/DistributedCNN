@@ -1,0 +1,5 @@
+#!/bin/bash
+while :; do
+  gpustat --json >> out.txt
+  sleep 2
+done 

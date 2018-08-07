@@ -13,11 +13,19 @@ import os
 import re
 import time
 from datetime import datetime
+import subprocess
+import psutil
 
+def kill(proc_pid):
+    process = psutil.Process(proc_pid)
+    for proc in process.children(recursive=True):
+        proc.kill()
+    process.kill()
 
 # Source:
 # https://stackoverflow.com/questions/38559755/how-to-get-current-available-gpus-in-tensorflow
 def get_available_gpus():
+    
     """
         Returns a list of the identifiers of all visible GPUs.
     """
@@ -78,6 +86,8 @@ def do_training(args,loss,image_names,ground_truth, predictions):
     config = tf.ConfigProto(log_device_placement=False, allow_soft_placement=True)
     # Add ops to save and restore all the variables.
     saver = tf.train.Saver()
+    #proc = subprocess.Popen(['./scr'])
+    #print("start process with pid %s" % proc.pid)
 
     with tf.Session(config=config) as sess:
         
@@ -87,7 +97,6 @@ def do_training(args,loss,image_names,ground_truth, predictions):
         currenttime = datetime.utcnow().strftime("%Y%m%d%H%M%S")
         logdir = "{}/run-{}/".format(args["log_path"], currenttime)
         summary_writer = tf.summary.FileWriter(logdir, sess.graph)
-
 
         logs = []
 
@@ -132,6 +141,7 @@ def do_training(args,loss,image_names,ground_truth, predictions):
             for i in range(0,len(logs)):
                 file_object.write(logs[i]+"\n")
          
+    #kill(proc.pid)
 
 
 PS_OPS = [
@@ -238,7 +248,7 @@ if __name__ == "__main__":
 
     # The following default values will be used if not provided from the command line arguments.
     DEFAULT_NUMBER_OF_GPUS = 1
-    DEFAULT_MAXSTEPS = 3648
+    DEFAULT_MAXSTEPS = 114
     DEFAULT_BATCHSIZE_PER_GPU = 32
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
     DEFAULT_PARALLEL_THREADS = 8
@@ -271,8 +281,15 @@ if __name__ == "__main__":
     start_time = time.time()
     tf.reset_default_graph()
 
+
+
+    proc = subprocess.Popen(['./scr'])
+    print("start process with pid %s" % proc.pid)
+
     parallel_training(args,training_model, training_dataset(args))
     duration = time.time() - start_time
+
+    kill(proc.pid)
 
     print("Duration : ", duration)
 

@@ -44,12 +44,13 @@ def training_dataset(args):
     Batched_dataset_train = dataset_train.map(
         lambda img, gt: tf.py_func(prepare.read_npy_file, [img, gt], [img.dtype, tf.float32]))
 
+
     Batched_dataset_train = Batched_dataset_train \
         .shuffle(buffer_size=500) \
         .map(prepare._parse_function,num_parallel_calls= args["num_parallel_threads"]) \
-        .batch(batch_size = args["batch_size"])\
+        .batch(batch_size = args["batch_size"]) \
         .prefetch(buffer_size = args["prefetch_buffer"])\
-        .repeat(args["number_of_epoch"])
+        .repeat()
 
 
     return Batched_dataset_train
@@ -101,6 +102,12 @@ def training_model(input_img, ground_truth):
 
 
 def do_training(args, update_op, loss, summary):
+
+    # Get the number of images in training dataset. This step was done before in dataset preparation, but done again because I am lazy to reconstruct the code.
+    train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
+
+    TRAINSET_LENGTH = len(train_set_image)
+    
     config = tf.ConfigProto(log_device_placement=False, allow_soft_placement=True)
 
     with tf.Session(config=config) as sess:
@@ -114,8 +121,9 @@ def do_training(args, update_op, loss, summary):
         # Saving the checkpoint
         saver = tf.train.Saver()
 
-        step = 0
-        while(True):
+        end_point = int((TRAINSET_LENGTH * int(args["number_of_epoch"])) / int(args["batch_size"]))
+
+        for step in range(0, end_point):
 
             start_time = time.time()
             _, loss_value = sess.run((update_op, loss))
@@ -155,7 +163,6 @@ def do_training(args, update_op, loss, summary):
                 ckptname = "{}/checkpoint@step-{}.ckpt".format(args["checkpoint_path"], step)
                 saver.save(sess,ckptname)
 
-            step+=1
 
         # Saving the final checkpoint
         ckptname = "{}/checkpoint_after_finalstep.ckpt".format(args["checkpoint_path"], step)
@@ -328,9 +335,15 @@ def parallel_training(args,model_fn, dataset):
 
 if __name__ == "__main__":
 
+    # Get the number of images in training dataset
+    #train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
+
+    #DEFAULT_TRAINSET_LENGTH = len(train_set_image)
+
+
     # The following default values will be used if not provided from the command line arguments.
     DEFAULT_NUMBER_OF_GPUS = 1
-    DEFAULT_EPOCH = 75
+    DEFAULT_EPOCH = 1
     # DEFAULT_MAXSTEPS = 20
     DEFAULT_BATCHSIZE_PER_GPU = 32
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
@@ -342,6 +355,7 @@ if __name__ == "__main__":
     DEFAULT_RATIO_TRAINTEST_DATASET = 0.7
     DEFAULT_LEARNING_RATE = 0.00001
     DEFAULT_CHECKPOINT_PATH = "/home/mrc689/tf_ckpt"
+    #DEFAULT_MAXSTEPS = (DEFAULT_TRAINSET_LENGTH * DEFAULT_EPOCH) / DEFAULT_BATCHSIZE
 
     # Create arguements to parse
     ap = argparse.ArgumentParser(description="Script to train the FlowerCounter model using multiGPUs in single node.")
@@ -350,7 +364,7 @@ if __name__ == "__main__":
     ap.add_argument("-e", "--number_of_epoch", required=False, help="Number of epochs",default = DEFAULT_EPOCH)
     ap.add_argument("-b", "--batch_size", required=False, help="Number of images to process in a minibatch",default = DEFAULT_BATCHSIZE)
     ap.add_argument("-gb", "--batch_size_per_GPU", required=False, help="Number of images to process in a batch per GPU",default = DEFAULT_BATCHSIZE_PER_GPU)
-    # ap.add_argument("-steps", "--max_steps", required=False, help="Maximum number of batches to run.", default = DEFAULT_MAXSTEPS)
+    #ap.add_argument("-steps", "--max_steps", required=False, help="Maximum number of batches to run.", default = DEFAULT_MAXSTEPS)
     ap.add_argument("-i", "--image_path", required=False, help="Input path of the images",default = DEFAULT_IMAGE_PATH)
     ap.add_argument("-gt", "--gt_path", required=False, help="Ground truth path of input images",default = DEFAULT_GT_PATH)
     ap.add_argument("-num_threads", "--num_parallel_threads", required=False, help="Number of threads to use in parallel for preprocessing elements in input pipeline", default = DEFAULT_PARALLEL_THREADS)
