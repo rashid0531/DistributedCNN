@@ -1,0 +1,3019 @@
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:37.508477",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 29,
+            "utilization.gpu": 10,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 573,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:39.689294",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 30,
+            "utilization.gpu": 5,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3738,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3155,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:41.828315",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 30,
+            "utilization.gpu": 1,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3738,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3155,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:43.973615",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 31,
+            "utilization.gpu": 0,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3738,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3155,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:46.121270",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 31,
+            "utilization.gpu": 1,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3738,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3155,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:48.271915",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 31,
+            "utilization.gpu": 0,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3738,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3155,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:50.430351",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 31,
+            "utilization.gpu": 0,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3738,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3155,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:52.601990",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 37,
+            "utilization.gpu": 99,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3870,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3287,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:54.758975",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 39,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3900,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3317,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:56.912266",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 40,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:55:59.158307",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 42,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:01.347345",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 41,
+            "utilization.gpu": 58,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:03.491204",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 40,
+            "utilization.gpu": 84,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:05.724519",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 41,
+            "utilization.gpu": 48,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:07.870737",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 39,
+            "utilization.gpu": 0,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:10.050772",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 43,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:12.198892",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 39,
+            "utilization.gpu": 0,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:14.360195",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 40,
+            "utilization.gpu": 90,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:16.534401",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 45,
+            "utilization.gpu": 81,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:18.682696",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 43,
+            "utilization.gpu": 6,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:20.823820",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 40,
+            "utilization.gpu": 1,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:23.030211",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 45,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:25.201080",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 43,
+            "utilization.gpu": 2,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:27.366532",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 42,
+            "utilization.gpu": 9,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:29.538252",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 45,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:31.657601",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 41,
+            "utilization.gpu": 1,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:33.832370",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 43,
+            "utilization.gpu": 35,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:36.726330",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 42,
+            "utilization.gpu": 1,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:39.122119",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 42,
+            "utilization.gpu": 1,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:41.298511",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 48,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:43.484144",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 44,
+            "utilization.gpu": 20,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:45.636862",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 47,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:47.975572",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 42,
+            "utilization.gpu": 2,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:50.102287",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 44,
+            "utilization.gpu": 41,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:52.339098",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 47,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:54.497170",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 45,
+            "utilization.gpu": 1,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:56.683699",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 49,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:56:58.860858",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 46,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:01.002130",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 45,
+            "utilization.gpu": 48,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:03.185112",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 43,
+            "utilization.gpu": 0,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:05.357683",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 46,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:07.574715",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 43,
+            "utilization.gpu": 1,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:09.790861",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 49,
+            "utilization.gpu": 99,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:11.976060",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 44,
+            "utilization.gpu": 2,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:14.162519",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 48,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:16.332422",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 46,
+            "utilization.gpu": 1,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:18.472682",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 44,
+            "utilization.gpu": 1,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:20.627710",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 44,
+            "utilization.gpu": 0,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:22.752546",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 46,
+            "utilization.gpu": 57,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:24.891147",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 47,
+            "utilization.gpu": 69,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:27.107230",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 48,
+            "utilization.gpu": 95,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:29.257732",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 46,
+            "utilization.gpu": 21,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:31.412032",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 48,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:33.613402",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 45,
+            "utilization.gpu": 0,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3918,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 242,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}
+{
+    "hostname": "mohammed-System-Product-Name",
+    "query_time": "2018-08-07T14:57:35.810240",
+    "gpus": [
+        {
+            "index": 0,
+            "uuid": "GPU-e13ef79b-c97a-8bdb-ad99-4977e02c4727",
+            "name": "GeForce GTX 1050 Ti",
+            "temperature.gpu": 50,
+            "utilization.gpu": 100,
+            "power.draw": null,
+            "enforced.power.limit": 75,
+            "memory.used": 3910,
+            "memory.total": 4036,
+            "processes": [
+                {
+                    "username": "mohammed",
+                    "command": "python",
+                    "gpu_memory_usage": 3327,
+                    "pid": 11228
+                },
+                {
+                    "username": "gdm",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 18,
+                    "pid": 1158
+                },
+                {
+                    "username": "gdm",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 48,
+                    "pid": 1206
+                },
+                {
+                    "username": "mohammed",
+                    "command": "Xorg",
+                    "gpu_memory_usage": 234,
+                    "pid": 1559
+                },
+                {
+                    "username": "mohammed",
+                    "command": "gnome-shell",
+                    "gpu_memory_usage": 197,
+                    "pid": 1702
+                },
+                {
+                    "username": "mohammed",
+                    "command": "chrome",
+                    "gpu_memory_usage": 72,
+                    "pid": 827
+                }
+            ]
+        }
+    ]
+}

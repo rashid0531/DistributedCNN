@@ -13,7 +13,16 @@ import os
 import re
 import time
 from datetime import datetime
+import subprocess
+import psutil
 
+
+# This function kills all the child processes associated with the parent process sent as function argument. 
+def kill(proc_pid):
+    process = psutil.Process(proc_pid)
+    for proc in process.children(recursive=True):
+        proc.kill()
+    process.kill()
 
 # Source:
 # https://stackoverflow.com/questions/38559755/how-to-get-current-available-gpus-in-tensorflow
@@ -376,12 +385,19 @@ if __name__ == "__main__":
     args = vars(ap.parse_args())
 
 
-
     start_time = time.time()
     tf.reset_default_graph()
+
+    # This process initiates the GPU profiling script.
+    proc = subprocess.Popen(['./scr'])
+    print("start process with pid %s" % proc.pid)
 
     parallel_training(args,training_model, training_dataset(args))
     duration = time.time() - start_time
 
+    kill(proc.pid)
+
     print("Duration : ", duration)
+
+
 
