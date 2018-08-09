@@ -4,8 +4,13 @@ import ast
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter
 import skimage.io as io
+import matplotlib.pyplot as plt
 
-def createDensityMap(shape, points):
+def createDensityMap(shape,name, points):
+
+    if (name == "1109-0805/frame000397_1_2.jpg"):
+            print(points)
+
 
     # creates an array of only zero values based on the shape of given array.
     dens_map = np.zeros(shape=[shape[0], shape[1]])
@@ -23,11 +28,11 @@ def createDensityMap(shape, points):
 
     # Changed the sigmoid following the advice from microscopic cell image.
     # sigmadots = 7
-    sigmadots = 2
+    sigmadots = 1
     dot_anno = gaussian_filter(normalized, sigmadots)
 
     # Following the advice from microscopic cell image.
-    dot_anno = dot_anno * 100
+    #dot_anno = dot_anno * 100
     dot_anno.astype(np.float32)
 
     return dot_anno
@@ -64,19 +69,19 @@ def get_all_coordinates(inputpath):
 
 if __name__== '__main__':
 
-    #gt_coordinate_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/coordinates/newly_added"
-    #gt_numpy_save_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/density_map"
+    gt_coordinate_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/coordinates/manual/1109"
+    gt_numpy_save_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/density_map/manual"
 
     
-    gt_coordinate_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/coordinates/1237"
-    gt_numpy_save_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map"
+    #gt_coordinate_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/coordinates/1237"
+    #gt_numpy_save_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map"
 
     if not os.path.exists(gt_numpy_save_path):
         os.makedirs(gt_numpy_save_path)
 
     all_coordinates = get_all_coordinates(gt_coordinate_path)
 
-    print(all_coordinates[0])
+    #print(all_coordinates[0])
     tmp = []
 
     for each in all_coordinates:
@@ -85,18 +90,27 @@ if __name__== '__main__':
 
         # Converting String dictionary to python dictionary
         d = ast.literal_eval(each)
-        img_name = d['image_name']
+        img_name = d['image_name']        
 
         gt_arr_name = img_name.split("/")[-1]
         gt_arr_name = gt_arr_name.split(".")[0]
 
-        arr = createDensityMap(shape=shape,points = d['coordinates'])
+        
+        arr = createDensityMap(shape=shape,name=img_name,points = d['coordinates'])
 
+        if (img_name == "1109-0805/frame000397_1_2.jpg"):
+            print(d['coordinates'])
+            print(np.sum(arr))
+            plt.imshow(arr)
+            plt.show()
+
+        ''' 
         output_np_path = gt_numpy_save_path + "/" + ('/'.join(img_name.split('/')[-2:-1])) + "/"
 
-        print(output_np_path)
+        #print(output_np_path)
 
         if not os.path.exists(output_np_path):
             os.makedirs(output_np_path)
 
         np.save(output_np_path+ gt_arr_name, arr)
+        '''
