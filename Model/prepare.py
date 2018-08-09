@@ -18,30 +18,34 @@ def filter_item(directory):
     for filename in glob.glob(directory+"/*"):
 
         for each_image in glob.glob(filename+"/*"):
-            image_name,camera_id = (each_image.split("/")[-1]).split("_")[0], (each_image.split("/")[-2])
-            image_name = int(image_name.replace("frame",""))
 
-            # if camera_id.split('-')[0] == '1109':
-#
-#                 dict= {}
-#
-#                 days_to_look_for = ['0706','0712']
-#
-#                 if camera_id.split('-')[1] in days_to_look_for:
-#
-#                     if (image_name >= 250 and image_name<= 1329):
-#
-#                         dict['camera_id'] = '1109'
-#                         dict['capturing_day'] = camera_id.split('-')[1]
-#                         dict['image_name'] = each_image
-#                         cameraid_capturing_days.append(dict)
+            image_name,camera_id = (each_image.split("/")[-1]).split("_")[0], (each_image.split("/")[-2])
+
+            image_name = int(image_name.replace("frame",""))
 
             """
             if camera_id.split('-')[0] == '1109':
 
                  dict= {}
 
-                 days_to_look_for = ['0803','0805']
+                 days_to_look_for = ['0706','0712']
+
+                 if camera_id.split('-')[1] in days_to_look_for:
+
+                     if (image_name >= 250 and image_name<= 1329):
+
+                         dict['camera_id'] = '1109'
+                         dict['capturing_day'] = camera_id.split('-')[1]
+                         dict['image_name'] = each_image
+                         cameraid_capturing_days.append(dict)
+            """
+            
+            if camera_id.split('-')[0] == '1109':
+
+                 dict= {}
+
+                 #days_to_look_for = ['0803','0805']
+                 days_to_look_for = ['0805','0806']
 
                  if camera_id.split('-')[1] in days_to_look_for:
 
@@ -52,6 +56,7 @@ def filter_item(directory):
                          dict['image_name'] = each_image
                          cameraid_capturing_days.append(dict)
 
+                 """
                  dict= {}
 
                  days_to_look_for = ['0802']
@@ -65,7 +70,7 @@ def filter_item(directory):
                          dict['image_name'] = each_image
                          cameraid_capturing_days.append(dict)
 
-            """
+        
             if camera_id.split('-')[0] == '1237':
 
                 dict = {}
@@ -80,6 +85,7 @@ def filter_item(directory):
                     dict['image_name'] = each_image
 
                     cameraid_capturing_days.append(dict)
+                """
 
     return cameraid_capturing_days
 
@@ -87,6 +93,8 @@ def filter_item(directory):
 def get_filtered_dataset(img_dir,gt_dir):
 
     cameraid_capturing_days = filter_item(img_dir)
+
+    #print("_____", gt_dir)
 
     annotated_gt = filter_item(gt_dir)
 

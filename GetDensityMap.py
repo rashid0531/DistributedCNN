@@ -7,10 +7,10 @@ import skimage.io as io
 import matplotlib.pyplot as plt
 
 def createDensityMap(shape,name, points):
-
+    """
     if (name == "1109-0805/frame000397_1_2.jpg"):
             print(points)
-
+    """
 
     # creates an array of only zero values based on the shape of given array.
     dens_map = np.zeros(shape=[shape[0], shape[1]])
@@ -28,7 +28,7 @@ def createDensityMap(shape,name, points):
 
     # Changed the sigmoid following the advice from microscopic cell image.
     # sigmadots = 7
-    sigmadots = 1
+    sigmadots = 7
     dot_anno = gaussian_filter(normalized, sigmadots)
 
     # Following the advice from microscopic cell image.
@@ -69,12 +69,14 @@ def get_all_coordinates(inputpath):
 
 if __name__== '__main__':
 
-    gt_coordinate_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/coordinates/manual/1109"
-    gt_numpy_save_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/density_map/manual"
+    #gt_coordinate_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/coordinates/manual/1109"
+    #gt_numpy_save_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/density_map/manual"
 
     
-    #gt_coordinate_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/coordinates/1237"
+    gt_coordinate_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/coordinates/1109"
     #gt_numpy_save_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map"
+
+    gt_numpy_save_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/1109"
 
     if not os.path.exists(gt_numpy_save_path):
         os.makedirs(gt_numpy_save_path)
@@ -98,13 +100,14 @@ if __name__== '__main__':
         
         arr = createDensityMap(shape=shape,name=img_name,points = d['coordinates'])
 
+        """
         if (img_name == "1109-0805/frame000397_1_2.jpg"):
             print(d['coordinates'])
             print(np.sum(arr))
             plt.imshow(arr)
             plt.show()
-
-        ''' 
+        """
+         
         output_np_path = gt_numpy_save_path + "/" + ('/'.join(img_name.split('/')[-2:-1])) + "/"
 
         #print(output_np_path)
@@ -113,4 +116,4 @@ if __name__== '__main__':
             os.makedirs(output_np_path)
 
         np.save(output_np_path+ gt_arr_name, arr)
-        '''
+        

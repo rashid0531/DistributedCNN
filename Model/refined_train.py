@@ -39,7 +39,7 @@ def training_dataset(args):
 
     train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
     
-    #print(len(train_set_image) , len(train_set_gt))
+    print("Trainset Length : ", len(train_set_image) , len(train_set_gt))
 
     # A vector of filenames for trainset.
     images_input_train = tf.constant(train_set_image)
@@ -352,7 +352,7 @@ if __name__ == "__main__":
 
     # The following default values will be used if not provided from the command line arguments.
     DEFAULT_NUMBER_OF_GPUS = 1
-    DEFAULT_EPOCH = 1
+    DEFAULT_EPOCH = 75
     # DEFAULT_MAXSTEPS = 20
     DEFAULT_BATCHSIZE_PER_GPU = 32
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
@@ -389,7 +389,7 @@ if __name__ == "__main__":
     tf.reset_default_graph()
 
     # This process initiates the GPU profiling script.
-    proc = subprocess.Popen(['./scr'])
+    proc = subprocess.Popen(['./gpu_profile'])
     print("start process with pid %s" % proc.pid)
 
     parallel_training(args,training_model, training_dataset(args))
