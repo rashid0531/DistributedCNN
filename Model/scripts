@@ -28,10 +28,10 @@
 #-savd_tst "/home/mrc689/DistributedCNN/evaluate/test_this_images.txt" \
 #-savd_gt  "/home/mrc689/DistributedCNN/evaluate/test_this_gt.txt"
 
-python refined_train.py -i "/home/mrc689/Sampled_Dataset" \
--gt "/home/mrc689/Sampled_Dataset_GT/density_map/xavier" \
--l "/home/mrc689/tf_logs" \
--ckpt_path "/home/mrc689/tf_ckpt"
+#python refined_train.py -i "/home/mrc689/Sampled_Dataset" \
+#-gt "/home/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+#-l "/home/mrc689/tf_logs" \
+#-ckpt_path "/home/mrc689/tf_ckpt"
 
 #python refined_test.py  -l "/home/mrc689/tf_logs" \
 #-ld_ckpt  "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/tf_ckpt/checkpoint_after_finalstep.ckpt" \
@@ -43,6 +43,8 @@ python refined_train.py -i "/home/mrc689/Sampled_Dataset" \
 #-l "/home/mrc689/tf_logs" \
 #-ckpt_path "/home/mrc689/tf_ckpt"
 
-
-
+python refined_train.py -i "/home/hduser/mrc689/Sampled_Dataset" \
+-gt "/home/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+-l "/home/hduser/mrc689/tf_logs" \
+-ckpt_path "/home/hduser/mrc689/tf_ckpt"
 
