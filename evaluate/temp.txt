@@ -1,0 +1,14 @@
+/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000315_0_0.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000543_0_2.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000540_1_3.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000063_2_4.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000019_0_3.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000032_0_2.npy
+
+/home/mrc689/Sampled_Dataset/1109-0802/frame000315_0_0.jpg
+/home/mrc689/Sampled_Dataset/1109-0802/frame000543_0_2.jpg
+/home/mrc689/Sampled_Dataset/1109-0802/frame000540_1_3.jpg
+/home/mrc689/Sampled_Dataset/1109-0802/frame000063_2_4.jpg
+/home/mrc689/Sampled_Dataset/1109-0802/frame000019_0_3.jpg
+/home/mrc689/Sampled_Dataset/1109-0802/frame000032_0_2.jpg
+

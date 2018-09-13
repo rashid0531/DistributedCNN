@@ -36,7 +36,6 @@ def filter_item(directory):
 #                         dict['image_name'] = each_image
 #                         cameraid_capturing_days.append(dict)
 
-<<<<<<< HEAD
             if camera_id.split('-')[0] == '1109':
 
                  dict= {}
@@ -64,10 +63,9 @@ def filter_item(directory):
                          dict['capturing_day'] = camera_id.split('-')[1]
                          dict['image_name'] = each_image
                          cameraid_capturing_days.append(dict)
+            
+            """   
 
-
-=======
->>>>>>> 06f76618ac2743ccec833c139d5438d36d2fb394
             if camera_id.split('-')[0] == '1237':
 
                 dict = {}
@@ -81,7 +79,7 @@ def filter_item(directory):
                     dict['image_name'] = each_image
 
                     cameraid_capturing_days.append(dict)
-
+            """   
     return cameraid_capturing_days
 
 
@@ -164,17 +162,11 @@ def get_train_test_DataSet(image_path,gt_path,ratio):
 
                 msg = "Couldn't find the density maps for the following images for camera-id: {} , day: {}".format(
                     ids[i].split('-')[0], ids[i].split('-')[1])
-<<<<<<< HEAD
                 print(msg)
 
                 culprits = find_them(img_list=filtered_img, gt_list=filtered_gt)
                 print(culprits)
-=======
                 # print(msg)
-
-                culprits = find_them(img_list=filtered_img, gt_list=filtered_gt)
-                # print(culprits)
->>>>>>> 06f76618ac2743ccec833c139d5438d36d2fb394
 
                 refined_img_list = remove_missing_gt(img_list=filtered_img, gt_list=culprits)
 

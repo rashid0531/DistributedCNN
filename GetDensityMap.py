@@ -69,14 +69,13 @@ def get_all_coordinates(inputpath):
 
 if __name__== '__main__':
 
-    #gt_coordinate_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/coordinates/manual/1109"
-    #gt_numpy_save_path = "/u1/rashid/FlowerCounter_Dataset_GroundTruth/density_map/manual"
 
-    
-    gt_coordinate_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/coordinates/1109"
-    #gt_numpy_save_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map"
+    gt_coordinate_path = "/home/mrc689/Sampled_Dataset_GT/coordinates/manual"
 
-    gt_numpy_save_path = "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/1109"
+    gt_numpy_save_path = "/home/mrc689/Sampled_Dataset_GT/density_map/manual"
+
+    #gt_numpy_save_path = "/home/mrc689/Sampled_Dataset_GT/density_map/xavier"
+    #gt_coordinate_path = "/home/mrc689/Sampled_Dataset_GT/coordinates/xavier"
 
     if not os.path.exists(gt_numpy_save_path):
         os.makedirs(gt_numpy_save_path)

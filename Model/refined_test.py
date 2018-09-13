@@ -16,6 +16,8 @@ from datetime import datetime
 import subprocess
 import psutil
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 def kill(proc_pid):
     process = psutil.Process(proc_pid)
     for proc in process.children(recursive=True):
@@ -33,11 +35,34 @@ def get_available_gpus():
     local_device_protos = device_lib.list_local_devices()
     return [x.name for x in local_device_protos if x.device_type == 'GPU']
 
+def load_image_gt(args):
+    
+    test_set_image = []
+    test_set_gt = []
+
+    with open(args["saved_test_img_list"],"r") as file_obj:
+
+        lines = file_obj.readlines()
+
+        for eachline in lines:
+            eachline = eachline.strip()
+            test_set_image.append(eachline)
+
+    with open(args["saved_test_gt_list"],"r") as file_obj:
+
+        lines = file_obj.readlines()
+
+        for eachline in lines:
+            eachline = eachline.strip()
+            test_set_gt.append(eachline) 
+
+    return test_set_image,test_set_gt
 
 def training_dataset(args):
 
-    train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
+    #train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
     
+    test_set_image , test_set_gt = load_image_gt(args) 
     print(len(test_set_image) , len(test_set_gt))
 
     # A vector of filenames for testset
@@ -53,9 +78,9 @@ def training_dataset(args):
 
     Batched_dataset_test = Batched_dataset_test \
         .map(prepare._parse_function,num_parallel_calls= args["num_parallel_threads"]) \
-        .batch(batch_size = args["batch_size"])\
+        .apply(tf.contrib.data.batch_and_drop_remainder(args["batch_size"])) \
         .prefetch(buffer_size = args["prefetch_buffer"])\
-        .repeat()
+        .repeat(1)
 
     return Batched_dataset_test
 
@@ -82,16 +107,21 @@ def training_model(input_img, ground_truth):
 
 
 def do_training(args,loss,image_names,ground_truth, predictions):
+
+    # Get the number of images in training dataset. This step was done before in dataset preparation, but done again because I am lazy to reconstruct the code.
+    #train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
+
+    test_set_image , test_set_gt = load_image_gt(args)
+
+    TESTSET_LENGTH = len(test_set_image)
     
     config = tf.ConfigProto(log_device_placement=False, allow_soft_placement=True)
     # Add ops to save and restore all the variables.
     saver = tf.train.Saver()
-    #proc = subprocess.Popen(['./scr'])
-    #print("start process with pid %s" % proc.pid)
 
     with tf.Session(config=config) as sess:
         
-        saver.restore(sess, "/home/mohammed/tf_ckpt/checkpoint@step-19000.ckpt")
+        saver.restore(sess, args["load_checkpoint_path"])
 
         # tf log initialization.
         currenttime = datetime.utcnow().strftime("%Y%m%d%H%M%S")
@@ -100,8 +130,9 @@ def do_training(args,loss,image_names,ground_truth, predictions):
 
         logs = []
 
-        step = 0
-        for step in range(0, args["max_steps"]):
+        end_point = int((TESTSET_LENGTH * int(args["number_of_epoch"])) / int(args["batch_size"]))
+
+        for step in range(0, end_point):
 
             start_time = time.time()
             loss_value, img_names, original_count, predicted_count = sess.run([loss,image_names, ground_truth, predictions])
@@ -109,8 +140,6 @@ def do_training(args,loss,image_names,ground_truth, predictions):
             img_names = np.array(img_names)
             original_count = np.array(original_count)
             predicted_count = np.array(predicted_count)
-            
-            #print(original_count.shape, predicted_count.shape)
 
             shape = img_names.shape
            
@@ -246,27 +275,38 @@ def parallel_training(args,model_fn, dataset):
 
 if __name__ == "__main__":
 
+    # Get the number of images in training dataset
+    #train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
+
+    #DEFAULT_TRAINSET_LENGTH = len(train_set_image)
+
+
     # The following default values will be used if not provided from the command line arguments.
     DEFAULT_NUMBER_OF_GPUS = 1
-    DEFAULT_MAXSTEPS = 114
-    DEFAULT_BATCHSIZE_PER_GPU = 32
+    DEFAULT_EPOCH = 1
+    # DEFAULT_MAXSTEPS = 20
+    DEFAULT_BATCHSIZE_PER_GPU = 1
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
     DEFAULT_PARALLEL_THREADS = 8
-    DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 1
+    DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 2
     DEFAULT_IMAGE_PATH = "/home/mrc689/Sampled_Dataset"
     DEFAULT_GT_PATH = "/home/mrc689/Sampled_Dataset_GT/density_map"
     DEFAULT_LOG_PATH = "/home/mrc689/tf_logs"
     DEFAULT_RATIO_TRAINTEST_DATASET = 0.7
     DEFAULT_LEARNING_RATE = 0.00001
     DEFAULT_CHECKPOINT_PATH = "/home/mrc689/tf_ckpt"
-
+    DEFAULT_LOAD_CHECKPOINT_PATH = "/home/mohammed/tf_ckpt/checkpoint@step-19000.ckpt"
+    #DEFAULT_MAXSTEPS = (DEFAULT_TRAINSET_LENGTH * DEFAULT_EPOCH) / DEFAULT_BATCHSIZE
+    DEFAULT_TESTSET = "/"
+    DEFAULT_GTSET = "/"
     # Create arguements to parse
     ap = argparse.ArgumentParser(description="Script to train the FlowerCounter model using multiGPUs in single node.")
 
     ap.add_argument("-g", "--num_gpus", required=False, help="How many GPUs to use.",default = DEFAULT_NUMBER_OF_GPUS)
+    ap.add_argument("-e", "--number_of_epoch", required=False, help="Number of epochs",default = DEFAULT_EPOCH)
     ap.add_argument("-b", "--batch_size", required=False, help="Number of images to process in a minibatch",default = DEFAULT_BATCHSIZE)
     ap.add_argument("-gb", "--batch_size_per_GPU", required=False, help="Number of images to process in a batch per GPU",default = DEFAULT_BATCHSIZE_PER_GPU)
-    ap.add_argument("-steps", "--max_steps", required=False, help="Maximum number of batches to run.", default = DEFAULT_MAXSTEPS)
+    #ap.add_argument("-steps", "--max_steps", required=False, help="Maximum number of batches to run.", default = DEFAULT_MAXSTEPS)
     ap.add_argument("-i", "--image_path", required=False, help="Input path of the images",default = DEFAULT_IMAGE_PATH)
     ap.add_argument("-gt", "--gt_path", required=False, help="Ground truth path of input images",default = DEFAULT_GT_PATH)
     ap.add_argument("-num_threads", "--num_parallel_threads", required=False, help="Number of threads to use in parallel for preprocessing elements in input pipeline", default = DEFAULT_PARALLEL_THREADS)
@@ -275,21 +315,25 @@ if __name__ == "__main__":
     ap.add_argument("-pbuff","--prefetch_buffer",required=False,help="An internal buffer to prefetch elements from the input dataset ahead of the time they are requested",default=DEFAULT_PREFETCH_BUFFER_SIZE)
     ap.add_argument("-lr", "--learning_rate", required=False, help="Default learning rate.",default = DEFAULT_LEARNING_RATE)
     ap.add_argument("-ckpt_path", "--checkpoint_path", required=False, help="Path to save the Tensorflow model as checkpoint file.",default = DEFAULT_CHECKPOINT_PATH)
-    args = vars(ap.parse_args())
+    ap.add_argument("-ld_ckpt", "--load_checkpoint_path", required=False, help="Path to load the Tensorflow model as checkpoint file.",default = DEFAULT_LOAD_CHECKPOINT_PATH)
+    ap.add_argument("-savd_tst", "--saved_test_img_list", required=False, help="List of test images.",default = DEFAULT_TESTSET)
+    ap.add_argument("-savd_gt", "--saved_test_gt_list", required=False, help="List of test ground truths.",default = DEFAULT_GTSET)
 
+
+    # The direcory of images and ground truths will not be required for this script as the list of test images names and gt  will be loaded from a saved .txt file  
+
+    args = vars(ap.parse_args())
 
     start_time = time.time()
     tf.reset_default_graph()
 
-
-
-    proc = subprocess.Popen(['./scr'])
-    print("start process with pid %s" % proc.pid)
+    # This process initiates the GPU profiling script.
+    #proc = subprocess.Popen(['./gpu_profile'])
+    #print("start process with pid %s" % proc.pid)
 
     parallel_training(args,training_model, training_dataset(args))
     duration = time.time() - start_time
 
-    kill(proc.pid)
+    #kill(proc.pid)
 
     print("Duration : ", duration)
-

@@ -1,31 +1,48 @@
 #!/bin/bash
 
+
+################## pgrep gpu_profile
+
 #python test.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2" \
 #-gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/part2" \
 #-l "/home/mohammed/tf_logs"
-
 
 #python refined_train.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2" \
 #-gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/part2" \
 #-l "/home/mohammed/tf_logs" \
 #-ckpt_path "/home/mohammed/tf_ckpt"
 
-python refined_train.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1109" \
--gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/1109" \
--l "/home/mohammed/tf_logs" \
--ckpt_path "/home/mohammed/tf_ckpt"
-
-
-
 #python refined_test.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2" \
 #-gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/part2" \
 #-l "/home/mohammed/tf_logs" \
 #-ckpt_path "/home/mohammed/tf_ckpt"
 
-
 #python show_predicted_map.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2/prediction_test" \
 #-gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/part2/prediction_test" \
 #-l "/home/mohammed/tf_logs" \
 #-ckpt_path "/home/mohammed/tf_ckpt"
+
+
+##############################################
+#python show_predicted_map.py -ld_ckpt  "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/tf_ckpt/checkpoint_after_finalstep.ckpt" \
+#-savd_tst "/home/mrc689/DistributedCNN/evaluate/test_this_images.txt" \
+#-savd_gt  "/home/mrc689/DistributedCNN/evaluate/test_this_gt.txt"
+
+python refined_train.py -i "/home/mrc689/Sampled_Dataset" \
+-gt "/home/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+-l "/home/mrc689/tf_logs" \
+-ckpt_path "/home/mrc689/tf_ckpt"
+
+#python refined_test.py  -l "/home/mrc689/tf_logs" \
+#-ld_ckpt  "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/tf_ckpt/checkpoint_after_finalstep.ckpt" \
+#-savd_tst "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/shuffled_test_img.txt" \
+#-savd_gt  "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/shuffled_test_gt.txt"
+
+#python refined_train.py -i "/home/mrc689/Sampled_Dataset" \
+#-gt "/home/mrc689/Sampled_Dataset_GT/density_map/manual" \
+#-l "/home/mrc689/tf_logs" \
+#-ckpt_path "/home/mrc689/tf_ckpt"
+
+
 
 

@@ -1,0 +1,6 @@
+/home/mrc689/Sampled_Dataset/1109-0802/frame000150_1_3.jpg
+/home/mrc689/Sampled_Dataset/1109-0802/frame000231_1_3.jpg
+/home/mrc689/Sampled_Dataset/1109-0802/frame000150_1_4.jpg
+/home/mrc689/Sampled_Dataset/1109-0802/frame000154_1_4.jpg
+/home/mrc689/Sampled_Dataset/1109-0802/frame000148_1_4.jpg
+/home/mrc689/Sampled_Dataset/1109-0802/frame000420_1_3.jpg

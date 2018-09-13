@@ -14,6 +14,8 @@ import re
 import time
 from datetime import datetime
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
 # Source:
 # https://stackoverflow.com/questions/38559755/how-to-get-current-available-gpus-in-tensorflow
 def get_available_gpus():
@@ -24,7 +26,7 @@ def get_available_gpus():
     local_device_protos = device_lib.list_local_devices()
     return [x.name for x in local_device_protos if x.device_type == 'GPU']
 
-
+"""
 def training_dataset(args):
 
     train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
@@ -47,6 +49,55 @@ def training_dataset(args):
         .batch(batch_size = args["batch_size"])\
         .prefetch(buffer_size = args["prefetch_buffer"])\
         .repeat()
+
+    return Batched_dataset_test
+"""
+def load_image_gt(args):
+    
+    test_set_image = []
+    test_set_gt = []
+
+    with open(args["saved_test_img_list"],"r") as file_obj:
+
+        lines = file_obj.readlines()
+
+        for eachline in lines:
+            eachline = eachline.strip()
+            test_set_image.append(eachline)
+
+    with open(args["saved_test_gt_list"],"r") as file_obj:
+
+        lines = file_obj.readlines()
+
+        for eachline in lines:
+            eachline = eachline.strip()
+            test_set_gt.append(eachline) 
+
+    return test_set_image,test_set_gt
+
+def training_dataset(args):
+
+    #train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
+    
+    test_set_image , test_set_gt = load_image_gt(args) 
+    print(len(test_set_image) , len(test_set_gt))
+
+    # A vector of filenames for testset
+    images_input_test = tf.constant(test_set_image) 
+    images_gt_test = tf.constant(test_set_gt)
+    
+    # At time of this writing Tensorflow doesn't support a mixture of user defined python function with tensorflow operations.
+    # So we can't use one py_func to process data using tenosrflow operation and nontensorflow operation.
+
+    dataset_test = tf.data.Dataset.from_tensor_slices((images_input_test, images_gt_test))
+    Batched_dataset_test = dataset_test.map(
+        lambda img, gt: tf.py_func(prepare.read_npy_file, [img, gt], [img.dtype, tf.float32]))
+
+    Batched_dataset_test = Batched_dataset_test \
+        .map(prepare._parse_function,num_parallel_calls= args["num_parallel_threads"]) \
+        .apply(tf.contrib.data.batch_and_drop_remainder(args["batch_size"])) \
+        .prefetch(buffer_size = args["prefetch_buffer"])\
+        .repeat(1)
 
     return Batched_dataset_test
 
@@ -74,7 +125,7 @@ def do_training(args,image_names,predictions):
 
     with tf.Session(config=config) as sess:
         
-        saver.restore(sess, "/home/mohammed/tf_ckpt/checkpoint@step-19000.ckpt")
+        saver.restore(sess, args["load_checkpoint_path"])
 
         # tf log initialization.
         currenttime = datetime.utcnow().strftime("%Y%m%d%H%M%S")
@@ -89,15 +140,15 @@ def do_training(args,image_names,predictions):
 
             start_time = time.time()
             img_names,predicted_map = sess.run([image_names,predictions])
+            for i in range(0,len(predicted_map)):    
+                img_names = np.array(img_names)
             
-            img_names = np.array(img_names)
-            
-            data = np.array(predicted_map)
+                data = np.array(predicted_map)
            
-            print(data[0].shape)
+                print(img_names[i])
             
-            plt.imshow(data[0])
-            plt.show()
+                plt.imshow(data[i])
+                plt.show()
 
 PS_OPS = [
     'Variable', 'VariableV2', 'AutoReloadVariable', 'MutableHashTable',
@@ -193,8 +244,10 @@ if __name__ == "__main__":
 
     # The following default values will be used if not provided from the command line arguments.
     DEFAULT_NUMBER_OF_GPUS = 1
-    DEFAULT_MAXSTEPS = 3648
-    DEFAULT_BATCHSIZE_PER_GPU = 32
+
+    # DEFAULT_MAXSTEPS should set to number of images for which we are interested to see the predicted map
+    DEFAULT_MAXSTEPS = 5
+    DEFAULT_BATCHSIZE_PER_GPU = 1
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
     DEFAULT_PARALLEL_THREADS = 8
     DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 1
@@ -204,6 +257,11 @@ if __name__ == "__main__":
     DEFAULT_RATIO_TRAINTEST_DATASET = 0.7
     DEFAULT_LEARNING_RATE = 0.00001
     DEFAULT_CHECKPOINT_PATH = "/home/mrc689/tf_ckpt"
+
+    DEFAULT_LOAD_CHECKPOINT_PATH = "/home/mohammed/tf_ckpt/checkpoint@step-19000.ckpt"
+    #DEFAULT_MAXSTEPS = (DEFAULT_TRAINSET_LENGTH * DEFAULT_EPOCH) / DEFAULT_BATCHSIZE
+    DEFAULT_TESTSET = "/"
+    DEFAULT_GTSET = "/"
 
     # Create arguements to parse
     ap = argparse.ArgumentParser(description="Script to train the FlowerCounter model using multiGPUs in single node.")
@@ -220,6 +278,11 @@ if __name__ == "__main__":
     ap.add_argument("-pbuff","--prefetch_buffer",required=False,help="An internal buffer to prefetch elements from the input dataset ahead of the time they are requested",default=DEFAULT_PREFETCH_BUFFER_SIZE)
     ap.add_argument("-lr", "--learning_rate", required=False, help="Default learning rate.",default = DEFAULT_LEARNING_RATE)
     ap.add_argument("-ckpt_path", "--checkpoint_path", required=False, help="Path to save the Tensorflow model as checkpoint file.",default = DEFAULT_CHECKPOINT_PATH)
+    ap.add_argument("-ld_ckpt", "--load_checkpoint_path", required=False, help="Path to load the Tensorflow model as checkpoint file.",default = DEFAULT_LOAD_CHECKPOINT_PATH)
+    ap.add_argument("-savd_tst", "--saved_test_img_list", required=False, help="List of test images.",default = DEFAULT_TESTSET)
+    ap.add_argument("-savd_gt", "--saved_test_gt_list", required=False, help="List of test ground truths.",default = DEFAULT_GTSET)
+
+
     args = vars(ap.parse_args())
 
 

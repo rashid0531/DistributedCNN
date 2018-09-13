@@ -16,6 +16,12 @@ from datetime import datetime
 import subprocess
 import psutil
 
+#os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5,6,7"
+
+#os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
+
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
+
 
 # This function kills all the child processes associated with the parent process sent as function argument. 
 def kill(proc_pid):
@@ -41,6 +47,21 @@ def training_dataset(args):
     
     print("Trainset Length : ", len(train_set_image) , len(train_set_gt))
 
+    #print(train_set_image[101],"\n",train_set_gt[101])
+
+    # Saving the test file names as they gets shuffled. Can use the same seed to randomly generate the same sequence but for the time being just using it.
+
+    with open("shuffled_test_img.txt","w") as file_object:
+
+        for i in range(0,len(test_set_image)):
+            file_object.write(str(test_set_image[i])+"\n")
+
+    with open("shuffled_test_gt.txt","w") as file_object:
+
+        for i in range(0,len(test_set_image)):
+            file_object.write(str(test_set_gt[i])+"\n")
+
+
     # A vector of filenames for trainset.
     images_input_train = tf.constant(train_set_image)
     images_gt_train = tf.constant(train_set_gt)
@@ -57,7 +78,7 @@ def training_dataset(args):
     Batched_dataset_train = Batched_dataset_train \
         .shuffle(buffer_size=500) \
         .map(prepare._parse_function,num_parallel_calls= args["num_parallel_threads"]) \
-        .batch(batch_size = args["batch_size"]) \
+        .apply(tf.contrib.data.batch_and_drop_remainder(args["batch_size"])) \
         .prefetch(buffer_size = args["prefetch_buffer"])\
         .repeat()
 
@@ -119,6 +140,10 @@ def do_training(args, update_op, loss, summary):
     
     config = tf.ConfigProto(log_device_placement=False, allow_soft_placement=True)
 
+    # Array to save example per seconds.
+
+    arr_examples_per_sec = []
+
     with tf.Session(config=config) as sess:
         sess.run(tf.global_variables_initializer())
 
@@ -143,6 +168,8 @@ def do_training(args, update_op, loss, summary):
 
                 num_examples_per_step = args["batch_size"]
                 examples_per_sec = num_examples_per_step / duration
+
+                arr_examples_per_sec.append(examples_per_sec)
 
                 sec_per_batch = duration / args["num_gpus"]
 
@@ -172,6 +199,7 @@ def do_training(args, update_op, loss, summary):
                 ckptname = "{}/checkpoint@step-{}.ckpt".format(args["checkpoint_path"], step)
                 saver.save(sess,ckptname)
 
+        
 
         # Saving the final checkpoint
         ckptname = "{}/checkpoint_after_finalstep.ckpt".format(args["checkpoint_path"], step)
@@ -179,7 +207,13 @@ def do_training(args, update_op, loss, summary):
 
     print('Final loss: {}'.format(loss_value))
 
+    with open("exm_per_sec.txt","w") as file_object:
 
+        for i in range(0,len(arr_examples_per_sec)):
+             file_object.write(str(arr_examples_per_sec[i])+"\n")
+
+    print("--- Experiment Finished ---")
+    
 PS_OPS = [
     'Variable', 'VariableV2', 'AutoReloadVariable', 'MutableHashTable',
     'MutableHashTableOfTensors', 'MutableDenseHashTable'
@@ -333,7 +367,7 @@ def parallel_training(args,model_fn, dataset):
             # remove any device specifications for the input data
             return iterator.get_next()
 
-    optimizer = tf.train.AdamOptimizer(learning_rate=args["learning_rate"])
+    optimizer = tf.train.AdamOptimizer(learning_rate=(args["learning_rate"]))
     update_op, loss, summary = create_parallel_optimization(args,
                                                             model_fn,
                                                             input_fn,
@@ -349,10 +383,9 @@ if __name__ == "__main__":
 
     #DEFAULT_TRAINSET_LENGTH = len(train_set_image)
 
-
     # The following default values will be used if not provided from the command line arguments.
-    DEFAULT_NUMBER_OF_GPUS = 1
-    DEFAULT_EPOCH = 75
+    DEFAULT_NUMBER_OF_GPUS = 2
+    DEFAULT_EPOCH = 5999
     # DEFAULT_MAXSTEPS = 20
     DEFAULT_BATCHSIZE_PER_GPU = 32
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
