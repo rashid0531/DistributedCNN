@@ -20,7 +20,7 @@ import psutil
 
 #os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 
 # This function kills all the child processes associated with the parent process sent as function argument. 
@@ -384,10 +384,10 @@ if __name__ == "__main__":
     #DEFAULT_TRAINSET_LENGTH = len(train_set_image)
 
     # The following default values will be used if not provided from the command line arguments.
-    DEFAULT_NUMBER_OF_GPUS = 2
+    DEFAULT_NUMBER_OF_GPUS = 1
     DEFAULT_EPOCH = 5999
     # DEFAULT_MAXSTEPS = 20
-    DEFAULT_BATCHSIZE_PER_GPU = 32
+    DEFAULT_BATCHSIZE_PER_GPU = 16
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
     DEFAULT_PARALLEL_THREADS = 8
     DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 2
@@ -422,13 +422,13 @@ if __name__ == "__main__":
     tf.reset_default_graph()
 
     # This process initiates the GPU profiling script.
-    proc = subprocess.Popen(['./gpu_profile'])
-    print("start process with pid %s" % proc.pid)
+    #proc = subprocess.Popen(['./gpu_profile'])
+    #print("start process with pid %s" % proc.pid)
 
     parallel_training(args,training_model, training_dataset(args))
     duration = time.time() - start_time
 
-    kill(proc.pid)
+    #kill(proc.pid)
 
     print("Duration : ", duration)
 
