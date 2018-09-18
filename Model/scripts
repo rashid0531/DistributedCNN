@@ -43,8 +43,28 @@
 #-l "/home/mrc689/tf_logs" \
 #-ckpt_path "/home/mrc689/tf_ckpt"
 
-python refined_train.py -i "/home/hduser/mrc689/Sampled_Dataset" \
--gt "/home/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
--l "/home/hduser/mrc689/tf_logs" \
--ckpt_path "/home/hduser/mrc689/tf_ckpt"
+#python refined_train.py -i "/home/hduser/mrc689/Sampled_Dataset" \
+#-gt "/home/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+#-l "/home/hduser/mrc689/tf_logs" \
+#-ckpt_path "/home/hduser/mrc689/tf_ckpt"
+
+
+########################### Distributed Training #################################
+
+#python distributed_train.py \
+#     -i "/home/hduser/mrc689/Sampled_Dataset" \
+#     -gt "/home/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+#     -pshosts = ps0.example.com:2222,ps1.example.com:2222 \
+#     -wkhosts = worker0.example.com:2222,worker1.example.com:2222 \
+#     -job = ps \
+#     -tsk_index=0
+
+
+python distributed_train.py \
+     -i "/home/hduser/mrc689/Sampled_Dataset" \
+     -gt "/home/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+     -pshosts = ps0.example.com:2222,ps1.example.com:2222 \
+     -wkhosts = worker0.example.com:2222,worker1.example.com:2222 \
+     -job = worker \
+     -tsk_index=0
 
