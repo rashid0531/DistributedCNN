@@ -48,6 +48,11 @@
 #-l "/home/hduser/mrc689/tf_logs" \
 #-ckpt_path "/home/hduser/mrc689/tf_ckpt"
 
+#python training_naive.py -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
+#-gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+#-l "/home/hduser/mrc689/tf_logs" \
+#-ckpt_path "/home/hduser/mrc689/tf_ckpt"
+
 
 ########################### Distributed Training #################################
 
@@ -63,8 +68,8 @@
 python distributed_train.py \
      -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
      -gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
-     -pshosts = 192.168.1.20:2222 \
-     -wkhosts = 192.168.1.21:2222,192.168.1.22:2222,192.168.1.23:2222 \
-     -job = worker \
-     -tsk_index=0
-
+     -pshosts "192.168.1.20:2222" \
+     -wkhosts "192.168.1.24:2222,192.168.1.22:2222,192.168.1.23:2222" \
+     -job "worker" \
+     -tsk_index 1
+     -ckpt_path "/data/mounted_hdfs_path/user/hduser/mrc689/tf_ckpt"

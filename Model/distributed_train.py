@@ -16,9 +16,11 @@ from datetime import datetime
 import subprocess
 import psutil
 
+tf.logging.set_verbosity(tf.logging.INFO)
+
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
-class _LoggerHook(tf.train.SessionRunHook,args):
+class _LoggerHook(tf.train.SessionRunHook):
     """Logs loss and runtime."""
 
     def begin(self):
@@ -63,7 +65,7 @@ def do_training(args):
     # Create and start a server for the local task.
     server = tf.train.Server(cluster,
                            job_name=args["job_name"],
-                           task_index=args["task_index"])
+                           task_index=int(args["task_index"]))
 
     if args["job_name"] == "ps":
         server.join()
@@ -71,7 +73,7 @@ def do_training(args):
     elif args["job_name"] == "worker":
 
         # Assigns ops to the local worker by default.
-        with tf.device(tf.train.replica_device_setter(worker_device="/job:worker/task:%d" % args["task_index"], cluster=cluster)):
+        with tf.device(tf.train.replica_device_setter(worker_device="/job:worker/task:%d" % int(args["task_index"]), ps_device="/job:ps/cpu:0", cluster=cluster)):
 
             train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
             
@@ -109,28 +111,28 @@ def do_training(args):
             split_batches_imgs = tf.split(mini_batch[1], int(args["num_gpus"]))
             split_batches_gt = tf.split(mini_batch[2], int(args["num_gpus"]))
 
-            predicted_density_map = core_model(split_batches_imgs)
+            predicted_density_map = core_model(split_batches_imgs[0])
 
             cost = tf.reduce_mean(
                     tf.sqrt(
                     tf.reduce_sum(
                     tf.square(
-                    tf.subtract(split_batches_gt, predicted_density_map)), axis=[1, 2, 3], keepdims=True)))
+                    tf.subtract(split_batches_gt[0], predicted_density_map)), axis=[1, 2, 3], keepdims=True)))
 
 
-            sum_of_gt = tf.reduce_sum(split_batches_gt, axis=[1, 2, 3], keepdims=True)
+            sum_of_gt = tf.reduce_sum(split_batches_gt[0], axis=[1, 2, 3], keepdims=True)
             sum_of_predicted_density_map = tf.reduce_sum(predicted_density_map, axis=[1, 2, 3], keepdims=True)
 
             mse = tf.sqrt(tf.reduce_mean(tf.square(sum_of_gt - sum_of_predicted_density_map)))
 
             # Changed the mean abosolute error.
             mae = tf.reduce_mean(
-                tf.reduce_sum(tf.abs(tf.subtract(sum_of_gt, sum_of_predicted_density_map)), axis=[1, 2, 3], keepdims=True))
+                tf.reduce_sum(tf.abs(tf.subtract(sum_of_gt, sum_of_predicted_density_map)), axis=[1, 2, 3], keepdims=True),name="mae")
 
             # Adding summary to the graph.
             # added a small threshold value with mae to prevent NaN to be stored in summary histogram.
             #tf.summary.scalar("Mean Squared Error", mse)
-            tf.summary.scalar("Mean Absolute Error", mae)
+            tf.summary.scalar("Mean_Absolute_Error", mae)
 
             # Retain the summaries from the final tower.
             summaries = tf.get_collection(tf.GraphKeys.SUMMARIES)
@@ -140,31 +142,56 @@ def do_training(args):
 
             summary_op = tf.summary.merge(summaries)
 
-            global_step = tf.contrib.framework.get_or_create_global_step()
+            global_step = tf.train.get_or_create_global_step()
 
             optimizer = tf.train.AdamOptimizer(learning_rate=(args["learning_rate"]))
 
-            train_op = optimizer.minimize(cost, global_step=global_step)
+            #train_op = optimizer.minimize(cost, global_step=global_step)
+
+            # Synchronous training.
+            opt = tf.train.SyncReplicasOptimizer(optimizer, replicas_to_aggregate=3,
+                               total_num_replicas=3)
+
+            # Some models have startup_delays to help stabilize the model but when using
+            # sync_replicas training, set it to 0.
+
+            # Now you can call `minimize()` or `compute_gradients()` and
+            # `apply_gradients()` normally
+
+            # !!!! Doubtful
+            training_op = opt.minimize(cost, global_step=global_step)
+
+            config = tf.ConfigProto(log_device_placement=False, allow_soft_placement=True)
 
         # The StopAtStepHook handles stopping after running given steps.
         end_point = int((TRAINSET_LENGTH * int(args["number_of_epoch"])) / int(args["batch_size"]))
 
+        is_chief=(int(args["task_index"]) == 0)
+
+        # You can create the hook which handles initialization and queues.
+        sync_replicas_hook = opt.make_session_run_hook(is_chief)
+
+        # Simple Example of logging hooks
+
+        tensors_to_log = {"MAE ": "mae"}
+        logging_hook = tf.train.LoggingTensorHook(tensors=tensors_to_log, every_n_iter=5)
+
         # last_step should be equal to the end_point
-        hooks=[tf.train.StopAtStepHook(last_step=1000000), _LoggerHook(mae,args)]
+        hooks=[sync_replicas_hook, tf.train.StopAtStepHook(last_step=1000000), logging_hook]
 
         # The MonitoredTrainingSession takes care of session initialization,
         # restoring from a checkpoint, saving to a checkpoint, and closing when done
         # or an error occurs.
         with tf.train.MonitoredTrainingSession(master=server.target,
-                                            is_chief=(args["task_index"] == 0),
-                                            checkpoint_dir="/tmp/train_logs",
-                                            hooks=hooks) as mon_sess:
+                                            is_chief=(int(args["task_index"]) == 0),
+                                            checkpoint_dir=args["checkpoint_path"],
+                                            hooks=hooks, config=config) as mon_sess:
             while not mon_sess.should_stop():
                 # Run a training step asynchronously.
                 # See <a href="../api_docs/python/tf/train/SyncReplicasOptimizer"><code>tf.train.SyncReplicasOptimizer</code></a> for additional details on how to
                 # perform *synchronous* training.
                 # mon_sess.run handles AbortedError in case of preempted PS.
-                mon_sess.run(train_op)
+                mon_sess.run(training_op)
 
     
 
@@ -174,7 +201,7 @@ if __name__ == "__main__":
     DEFAULT_NUMBER_OF_GPUS = 1
     DEFAULT_EPOCH = 5999
     
-    DEFAULT_NUMBER_OF_WORKERS = 2
+    DEFAULT_NUMBER_OF_WORKERS = 3
     DEFAULT_NUMBER_OF_PS = 1
     DEFAULT_BATCHSIZE_PER_GPU = 16
 

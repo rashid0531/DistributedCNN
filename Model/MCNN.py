@@ -29,7 +29,8 @@ class MCNN():
 
         # First convolutional layer
         conv1 = tf.layers.conv2d(input_image, filters=properties['conv1'][0], kernel_size=properties['conv1'][1],
-                                 strides=[properties['conv1'][2], properties['conv1'][2]], padding="SAME", activation=tf.nn.relu,name = variable_layer_name +'conv1')
+                                 strides=[properties['conv1'][2], properties['conv1'][2]], padding="SAME", activation=tf.nn.relu,name = variable_layer_name +'conv1',
+                                 reuse=True)
 
         # Max pool layer - 1st
         max_pool1 = tf.nn.max_pool(conv1, ksize=[1, properties['maxPool1'][0], properties['maxPool1'][0], 1],
@@ -38,7 +39,8 @@ class MCNN():
         # 2nd convolutional layer
         conv2 = tf.layers.conv2d(max_pool1, filters=properties['conv2'][0], kernel_size=properties['conv2'][1],
                                  strides=[properties['conv2'][2], properties['conv2'][2]], padding="SAME",
-                                 activation=tf.nn.relu,name = variable_layer_name +'conv2')
+                                 activation=tf.nn.relu,name = variable_layer_name +'conv2',
+                                 reuse=True)
 
         # Max pool layer - 2nd
         max_pool2 = tf.nn.max_pool(conv2, ksize=[1, properties['maxPool2'][0], properties['maxPool2'][0], 1],
@@ -48,20 +50,21 @@ class MCNN():
         # 3rd convolutional layer
         conv3 = tf.layers.conv2d(max_pool2, filters=properties['conv3'][0], kernel_size=properties['conv3'][1],
                                  strides=[properties['conv3'][2], properties['conv3'][2]], padding="SAME",
-                                 activation=tf.nn.relu,name = variable_layer_name + 'conv3')
+                                 activation=tf.nn.relu,name = variable_layer_name + 'conv3'
+                                 reuse=True)
 
         # 3rd convolutional layer
         conv4 = tf.layers.conv2d(conv3, filters=properties['conv4'][0], kernel_size=properties['conv4'][1],
                                  strides=[properties['conv4'][2], properties['conv4'][2]], padding="SAME",
-                                 activation=tf.nn.relu,name = variable_layer_name + 'conv4')
-
+                                 activation=tf.nn.relu,name = variable_layer_name + 'conv4',reuse=True)
+                                 
         return conv4
 
     def final_layer(self,input,properties):
 
         final_conv = tf.layers.conv2d(input, filters=properties['conv1'][0], kernel_size=properties['conv1'][1],
                                  strides=[properties['conv1'][2], properties['conv1'][2]], padding="SAME",
-                                 activation=tf.nn.relu,name = 'final_conv')
+                                 activation=tf.nn.relu,name = 'final_conv',reuse=True)
 
         return final_conv
 
