@@ -78,13 +78,15 @@ def get_balanced_dataset_automatic(image,gt):
                 #print(image[i])
         """
 
-    print(len(elements_in_bins),"\n", len(elements_in_bins[0]),len (elements_in_bins[1]),len(elements_in_bins[2]))
+    print("Number of Bins : ",len(elements_in_bins),"\n")
+    print("Images per Bin: ",len(elements_in_bins[0]),",",len (elements_in_bins[1]),",",len(elements_in_bins[2]),"\n")
 
     randomly_sampled_dataset = []
 
     #random.seed(354)
 
-    number_of_samples = 686
+    number_of_samples = np.min([len(elements_in_bins[0]),len(elements_in_bins[1]),len(elements_in_bins[2])])
+    print("Number of samples to be collected from each bin : ",number_of_samples)
 
     for i in range(0,len(elements_in_bins)):
         randomly_sampled_dataset.append(random.sample(elements_in_bins[i],number_of_samples))
