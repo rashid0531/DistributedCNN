@@ -15,6 +15,8 @@ import time
 from datetime import datetime
 import subprocess
 import psutil
+from tensorflow.contrib import slim
+import analyze_ops_and_vars as analyzer
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -93,6 +95,10 @@ def do_training(args):
 
     for var in tf.trainable_variables():
         summaries.append(tf.summary.histogram(var.op.name, var))
+    
+    analyzer.analyze_vars(tf.trainable_variables(), print_info=True)
+    
+    #slim.model_analyzer.analyze_vars([my_var], print_info=True)
 
     summary_op = tf.summary.merge(summaries)
 
