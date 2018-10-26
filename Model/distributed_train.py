@@ -147,10 +147,10 @@ def do_training(args):
             config = tf.ConfigProto(log_device_placement=False, allow_soft_placement=True)
 
         # The StopAtStepHook handles stopping after running given steps.
-        SHARDED_TRAINSET_LENGTH = int(TRAINSET_LENGTH/len(worker_hosts))
+        #SHARDED_TRAINSET_LENGTH = int(TRAINSET_LENGTH/len(worker_hosts))
         effective_batch_size = int(args["batch_size_per_GPU"])*len(worker_hosts)  
 
-        end_point = int((SHARDED_TRAINSET_LENGTH * int(args["number_of_epoch"])) / effective_batch_size)
+        end_point = int((TRAINSET_LENGTH * int(args["number_of_epoch"])) / effective_batch_size)
         print("End Point : ",end_point)
 
         is_chief=(int(args["task_index"]) == 0)
@@ -212,15 +212,17 @@ if __name__ == "__main__":
 
     # The following default values will be used if not provided from the command line arguments.
     DEFAULT_NUMBER_OF_GPUS = 1
-    DEFAULT_EPOCH = 5999
+    DEFAULT_EPOCH = 3000
     
     DEFAULT_NUMBER_OF_WORKERS = 1
     DEFAULT_NUMBER_OF_PS = 1
-    DEFAULT_BATCHSIZE_PER_GPU = 16
+    DEFAULT_BATCHSIZE_PER_GPU = 8
 
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS * DEFAULT_NUMBER_OF_WORKERS
     DEFAULT_PARALLEL_THREADS = 8
-    DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 2
+    #DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 2
+
+    DEFAULT_PREFETCH_BUFFER_SIZE = 128
     DEFAULT_IMAGE_PATH = "/home/mrc689/Sampled_Dataset"
     DEFAULT_GT_PATH = "/home/mrc689/Sampled_Dataset_GT/density_map"
     DEFAULT_LOG_PATH = "/home/mrc689/tf_logs"
