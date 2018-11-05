@@ -88,6 +88,8 @@ def get_balanced_dataset_automatic(image,gt):
     number_of_samples = np.min([len(elements_in_bins[0]),len(elements_in_bins[1]),len(elements_in_bins[2])])
     print("Number of samples to be collected from each bin : ",number_of_samples)
 
+    random.seed(354)
+
     for i in range(0,len(elements_in_bins)):
         randomly_sampled_dataset.append(random.sample(elements_in_bins[i],number_of_samples))
 
@@ -304,7 +306,7 @@ def get_train_test_DataSet(image_path,gt_path,ratio):
     # From here    
     paired_img_gt = list(zip(filtered_image_dataset, filtered_gt_dataset))
 
-    #random.seed(354)
+    random.seed(354)
     # Shuffles the whole list 
     random.shuffle(paired_img_gt)
 
