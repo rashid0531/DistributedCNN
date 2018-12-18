@@ -77,12 +77,9 @@
 python distributed_train_tweaked.py \
      -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
      -gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
-     -pshosts "192.168.1.28:2222" \
-     -wkhosts "192.168.1.25:2222,192.168.1.26:2222,192.168.1.27:2222,192.168.1.29:2222" \
+     -pshosts "192.168.1.21:2222" \
+     -wkhosts "192.168.1.22:2222,192.168.1.23:2222,192.168.1.24:2222,192.168.1.25:2222,192.168.1.26:2222,192.168.1.27:2222,192.168.1.28:2222,192.168.1.29:2222" \
      -job "worker" \
-     -tsk_index 3  \
+     -tsk_index 7 \
      -ckpt_path "/discus/P2IRC/rashid/tf_ckpt"
 
-
-
-#-wkhosts "192.168.1.21:2222,192.168.1.22:2222,192.168.1.23:2222,192.168.1.24:2222,192.168.1.25:2222,192.168.1.26:2222,192.168.1.27:2222,192.168.1.28:2222" \

@@ -109,7 +109,9 @@ def do_training(args):
     global_step = tf.train.get_or_create_global_step()
 
     #changed for Horovod.
-    optimizer = tf.train.AdamOptimizer((args["learning_rate"]) * hvd.size())
+    #optimizer = tf.train.AdamOptimizer((args["learning_rate"]) * hvd.size())
+
+    optimizer = tf.train.AdamOptimizer((args["learning_rate"]))
 
     #train_op = optimizer.minimize(cost, global_step=global_step)
 
@@ -136,6 +138,7 @@ def do_training(args):
 
     end_point = int((TRAINSET_LENGTH * int(args["number_of_epoch"])) / effective_batch_size)
     print("My Rank: ", hvd.rank())
+    print("My local Rank: ", hvd.local_rank())
     print("End Point : ",end_point)
 
 
