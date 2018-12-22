@@ -1,7 +1,7 @@
 import glob
 import pickle
 import itertools
-import config as config
+import Model.config as config
 import tensorflow as tf
 import numpy as np
 import cv2

@@ -4,11 +4,11 @@ import tensorflow as tf
 import os
 from PIL import Image, ImageFile
 import numpy as np
-import prepare
+import Model.prepare as prepare
 from matplotlib import pyplot as plt
 from datetime import datetime
 from tensorflow.python.client import timeline
-import modified_MCNN as model
+import Model.modified_MCNN as model
 import os
 import re
 import time
@@ -246,13 +246,13 @@ if __name__ == "__main__":
     tf.reset_default_graph()
 
     # This process initiates the GPU profiling script.
-    proc = subprocess.Popen(['./gpu_profile'])
-    print("start GPU profiling process with pid %s" % proc.pid)
+    #proc = subprocess.Popen(['./gpu_profile'])
+    #print("start GPU profiling process with pid %s" % proc.pid)
 
     do_training(args)
     duration = time.time() - start_time
 
-    kill(proc.pid)
+    #kill(proc.pid)
 
     print("Duration : ", duration)
 

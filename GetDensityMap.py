@@ -99,14 +99,7 @@ if __name__== '__main__':
         
         arr = createDensityMap(shape=shape,name=img_name,points = d['coordinates'])
 
-        """
-        if (img_name == "1109-0805/frame000397_1_2.jpg"):
-            print(d['coordinates'])
-            print(np.sum(arr))
-            plt.imshow(arr)
-            plt.show()
-        """
-         
+        
         output_np_path = gt_numpy_save_path + "/" + ('/'.join(img_name.split('/')[-2:-1])) + "/"
 
         #print(output_np_path)

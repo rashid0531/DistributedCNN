@@ -26,32 +26,7 @@ def get_available_gpus():
     local_device_protos = device_lib.list_local_devices()
     return [x.name for x in local_device_protos if x.device_type == 'GPU']
 
-"""
-def training_dataset(args):
 
-    train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
-    
-    print(len(test_set_image) , len(test_set_gt))
-
-    # A vector of filenames for testset
-    images_input_test = tf.constant(test_set_image) 
-    images_gt_test = tf.constant(test_set_gt)
-    
-    # At time of this writing Tensorflow doesn't support a mixture of user defined python function with tensorflow operations.
-    # So we can't use one py_func to process data using tenosrflow operation and nontensorflow operation.
-
-    dataset_test = tf.data.Dataset.from_tensor_slices((images_input_test, images_gt_test))
-    Batched_dataset_test = dataset_test.map(
-        lambda img, gt: tf.py_func(prepare.read_npy_file, [img, gt], [img.dtype, tf.float32]))
-
-    Batched_dataset_test = Batched_dataset_test \
-        .map(prepare._parse_function,num_parallel_calls= args["num_parallel_threads"]) \
-        .batch(batch_size = args["batch_size"])\
-        .prefetch(buffer_size = args["prefetch_buffer"])\
-        .repeat()
-
-    return Batched_dataset_test
-"""
 def load_image_gt(args):
     
     test_set_image = []

@@ -4,7 +4,7 @@ from PIL import Image, ImageFile
 import numpy as np
 import cv2
 import pandas as pd
-import config as config
+import Model.config as config
 from matplotlib import pyplot as plt
 
 class MCNN():

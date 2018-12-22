@@ -1,1 +1,85 @@
-HOROVOD_CUDA_HOME=/home/mrc689/local/cuda-9.0/ HOROVOD_GPU_ALLREDUCE=NCCL pip install --no-cache-dir horovod
+#!/bin/bash
+
+
+################## pgrep gpu_profile
+
+#python test.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2" \
+#-gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/part2" \
+#-l "/home/mohammed/tf_logs"
+
+#python refined_train.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2" \
+#-gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/part2" \
+#-l "/home/mohammed/tf_logs" \
+#-ckpt_path "/home/mohammed/tf_ckpt"
+
+#python refined_test.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2" \
+#-gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/part2" \
+#-l "/home/mohammed/tf_logs" \
+#-ckpt_path "/home/mohammed/tf_ckpt"
+
+#python show_predicted_map.py -i "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/Image_Tiles/1237/part2/prediction_test" \
+#-gt "/media/mohammed/Drive_full_of_surprises/Projects/Dataset/ground_truth/density_map/part2/prediction_test" \
+#-l "/home/mohammed/tf_logs" \
+#-ckpt_path "/home/mohammed/tf_ckpt"
+
+
+##############################################
+#python show_predicted_map.py -ld_ckpt  "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/tf_ckpt/checkpoint_after_finalstep.ckpt" \
+#-savd_tst "/home/mrc689/DistributedCNN/evaluate/test_this_images.txt" \
+#-savd_gt  "/home/mrc689/DistributedCNN/evaluate/test_this_gt.txt"
+
+#python refined_train.py -i "/home/mrc689/Sampled_Dataset" \
+#-gt "/home/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+#-l "/home/mrc689/tf_logs" \
+#-ckpt_path "/home/mrc689/tf_ckpt"
+
+#python refined_test.py  -l "/home/mrc689/tf_logs" \
+#-ld_ckpt  "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/tf_ckpt/checkpoint_after_finalstep.ckpt" \
+#-savd_tst "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/shuffled_test_img.txt" \
+#-savd_gt  "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/shuffled_test_gt.txt"
+
+#python refined_train.py -i "/home/mrc689/Sampled_Dataset" \
+#-gt "/home/mrc689/Sampled_Dataset_GT/density_map/manual" \
+#-l "/home/mrc689/tf_logs" \
+#-ckpt_path "/home/mrc689/tf_ckpt"
+
+#python refined_train.py -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
+#-gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+#-l "/home/hduser/mrc689/tf_logs" \
+#-ckpt_path "/home/hduser/mrc689/tf_ckpt"
+
+#python training_naive.py -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
+#-gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+#-l "/home/rashid/tf_logs" \
+#-ckpt_path "/home/rashid/tf_ckpt"
+
+
+########################### Distributed Training #################################
+
+#python distributed_train.py \
+#     -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
+#     -gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+#     -pshosts = 192.168.1.20:2222 \
+#     -wkhosts = 192.168.1.21:2222,192.168.1.22:2222,192.168.1.23:2222 \
+#     -job = worker \
+#     -tsk_index=0
+
+
+#python distributed_train.py \
+#     -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
+#     -gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+#     -pshosts "192.168.1.20:2222" \
+#     -wkhosts "192.168.1.21:2222" \
+#     -job "worker" \
+#     -tsk_index 0  \
+#     -ckpt_path "/discus/P2IRC/rashid/tf_ckpt"
+
+python distributed_train_tweaked.py \
+     -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
+     -gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+     -pshosts "192.168.1.21:2222" \
+     -wkhosts "192.168.1.22:2222,192.168.1.23:2222,192.168.1.24:2222,192.168.1.25:2222,192.168.1.26:2222,192.168.1.27:2222,192.168.1.28:2222,192.168.1.29:2222" \
+     -job "worker" \
+     -tsk_index 7 \
+     -ckpt_path "/discus/P2IRC/rashid/tf_ckpt"
+
