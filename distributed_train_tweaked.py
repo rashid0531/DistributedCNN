@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import tensorflow as tf
+from tensorflow.python.client import timeline
 import time
 from datetime import datetime
 import subprocess
@@ -78,7 +79,6 @@ def do_training(args,server,cluster_spec):
         # with tensorflow operations.So we can't use one py_func to process data using tenosrflow operation and
         # nontensorflow operation.
 
-        # Train Set
         Batched_dataset_train = dataset_train.map(
             lambda img, gt: tf.py_func(prepare.read_npy_file, [img, gt], [img.dtype, tf.float32]))
 
@@ -100,7 +100,12 @@ def do_training(args,server,cluster_spec):
         split_batches_gt = tf.split(mini_batch[2], int(args["num_gpus"]))
 
         predicted_density_map = core_model(split_batches_imgs[0])
-        assert tf.shape(predicted_density_map) == [224, 224, 1], "Dimension of the predicted map needs to be 224x224x1"
+
+	# Dimension of the predicted map needs to be (Batch size per GPUx224x224x1)
+        assert predicted_density_map.get_shape()[0] == args["batch_size_per_GPU"], "Output batch size needs to match with input batch size"
+        assert predicted_density_map.get_shape()[1] == 224, "The length of the predicted density map needs to be 224"
+        assert predicted_density_map.get_shape()[2] == 224, "The width of the predicted density map needs to be 224"
+        assert predicted_density_map.get_shape()[3] == 1, "The predicted density map should have only one color channel"
 
         # Definition of loss function (Pixel wise euclidean distance between ground-truth and predicted density map).
         # is used here
@@ -160,6 +165,7 @@ def do_training(args,server,cluster_spec):
     effective_batch_size = int(args["batch_size_per_GPU"]) * len(args["worker_hosts"].split(","))
 
     end_point = int((TRAINSET_LENGTH * int(args["number_of_epoch"])) / effective_batch_size)
+    end_point = 3
     print("End Point : ", end_point)
 
     # One worker among all the worker machines takes the responsibility of chief worker. The chief worker periodically
@@ -170,7 +176,7 @@ def do_training(args,server,cluster_spec):
     sync_replicas_hook = opt.make_session_run_hook(is_chief)
 
     # Creating profiler hook. Used for profiling CPU, GPU usage, runtime of individual operation.
-    profile_hook = tf.train.ProfilerHook(save_steps=1500, output_dir='/home/rashid/DistributedCNN/Model/timeline/')
+    profile_hook = tf.train.ProfilerHook(save_steps=1500, output_dir='/home/rashid/DistributedCNN/timeline/')
 
     # The StopAtStepHook handles when to stop training. When the last_step is reached, the training is terminated.
     # last_step should be equal to the end_point.
