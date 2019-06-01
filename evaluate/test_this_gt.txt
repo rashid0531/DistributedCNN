@@ -1,5 +1,10 @@
-/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000231_1_3.npy
-/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000154_1_4.npy
-/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000418_1_2.npy
-/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000150_1_3.npy
-/home/mrc689/Sampled_Dataset_GT/density_map/xavier/1109-0802/frame000150_1_4.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0704/frame000350_2_4.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0704/frame001201_0_0.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0704/frame000983_0_0.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0704/frame000555_0_1.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0704/frame001104_0_2.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0705/frame000507_1_1.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0705/frame000619_1_2.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0705/frame000719_2_0.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0705/frame000882_1_3.npy
+/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0705/frame000599_2_3.npy

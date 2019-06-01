@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 import argparse
 import tensorflow as tf
-import os
 from PIL import Image, ImageFile
 import numpy as np
-import prepare
 from matplotlib import pyplot as plt
 from datetime import datetime
 from tensorflow.python.client import timeline
-import modified_MCNN as model
 import os
 import re
 import time
 from datetime import datetime
+
+import Model.prepare as prepare
+import Model.modified_MCNN as model
+
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -52,15 +53,14 @@ def load_image_gt(args):
 
 def training_dataset(args):
 
-    #train_set_image, train_set_gt, test_set_image, test_set_gt = prepare.get_train_test_DataSet(args["image_path"], args["gt_path"], args["dataset_train_test_ratio"])
-    
     test_set_image , test_set_gt = load_image_gt(args) 
-    print(len(test_set_image) , len(test_set_gt))
+    print(tf.shape(test_set_image))
 
     # A vector of filenames for testset
     images_input_test = tf.constant(test_set_image) 
     images_gt_test = tf.constant(test_set_gt)
-    
+
+    print(images_input_test.shape, images_gt_test.shape)    
     # At time of this writing Tensorflow doesn't support a mixture of user defined python function with tensorflow operations.
     # So we can't use one py_func to process data using tenosrflow operation and nontensorflow operation.
 
@@ -117,13 +117,17 @@ def do_training(args,image_names,predictions):
             img_names,predicted_map = sess.run([image_names,predictions])
             for i in range(0,len(predicted_map)):    
                 img_names = np.array(img_names)
-            
                 data = np.array(predicted_map)
            
-                print(img_names[i])
-            
+                graphs_save_location = str(img_names[i][0])
+                #print(graphs_save_location)
+                graphs_save_location = graphs_save_location.split('/')
+                graphs_save_location = 'pred_l_'+graphs_save_location[-2]+'_'+graphs_save_location[-1][0:-5]+'.png'
+                print(graphs_save_location)
                 plt.imshow(data[i])
-                plt.show()
+                plt.axis("off")
+                plt.savefig(graphs_save_location, format='png', dpi=300)
+                #plt.show()
 
 PS_OPS = [
     'Variable', 'VariableV2', 'AutoReloadVariable', 'MutableHashTable',
@@ -221,7 +225,7 @@ if __name__ == "__main__":
     DEFAULT_NUMBER_OF_GPUS = 1
 
     # DEFAULT_MAXSTEPS should set to number of images for which we are interested to see the predicted map
-    DEFAULT_MAXSTEPS = 5
+    DEFAULT_MAXSTEPS = 10
     DEFAULT_BATCHSIZE_PER_GPU = 1
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
     DEFAULT_PARALLEL_THREADS = 8

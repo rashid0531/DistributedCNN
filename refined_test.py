@@ -1,31 +1,23 @@
 #!/usr/bin/env python
 import argparse
 import tensorflow as tf
-import os
-from PIL import Image, ImageFile
-import numpy as np
-import prepare
-from matplotlib import pyplot as plt
-from datetime import datetime
 from tensorflow.python.client import timeline
-import modified_MCNN as model
-import os
-import re
 import time
 from datetime import datetime
 import subprocess
 import psutil
+import os
+import numpy as np
+import sys
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+import Model.prepare as prepare
+import Model.modified_MCNN as model
 
-def kill(proc_pid):
-    process = psutil.Process(proc_pid)
-    for proc in process.children(recursive=True):
-        proc.kill()
-    process.kill()
+# Sets the threshold for what messages will be logged.
+tf.logging.set_verbosity(tf.logging.INFO)
 
-# Source:
-# https://stackoverflow.com/questions/38559755/how-to-get-current-available-gpus-in-tensorflow
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
+
 def get_available_gpus():
     
     """
@@ -34,6 +26,7 @@ def get_available_gpus():
     from tensorflow.python.client import device_lib
     local_device_protos = device_lib.list_local_devices()
     return [x.name for x in local_device_protos if x.device_type == 'GPU']
+
 
 def load_image_gt(args):
     
@@ -48,6 +41,8 @@ def load_image_gt(args):
             eachline = eachline.strip()
             test_set_image.append(eachline)
 
+    test_set_image = sorted(test_set_image)
+    
     with open(args["saved_test_gt_list"],"r") as file_obj:
 
         lines = file_obj.readlines()
@@ -56,7 +51,11 @@ def load_image_gt(args):
             eachline = eachline.strip()
             test_set_gt.append(eachline) 
 
+    test_set_gt = sorted(test_set_gt)
+
     return test_set_image,test_set_gt
+
+
 
 def training_dataset(args):
 

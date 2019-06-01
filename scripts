@@ -28,20 +28,24 @@
 #-savd_tst "/home/mrc689/DistributedCNN/evaluate/test_this_images.txt" \
 #-savd_gt  "/home/mrc689/DistributedCNN/evaluate/test_this_gt.txt"
 
+#python show_predicted_map.py -ld_ckpt "/home/mrc689/results/manual/1109-0704-0710/tf_ckpt/checkpoint_after_finalstep.ckpt" \
+#-savd_tst "/home/mrc689/DistributedCNN/evaluate/test_this_images.txt" \
+#-savd_gt  "/home/mrc689/DistributedCNN/evaluate/test_this_gt.txt"
+
 #python refined_train.py -i "/home/mrc689/Sampled_Dataset" \
 #-gt "/home/mrc689/Sampled_Dataset_GT/density_map/xavier" \
 #-l "/home/mrc689/tf_logs" \
 #-ckpt_path "/home/mrc689/tf_ckpt"
 
-#python refined_test.py  -l "/home/mrc689/tf_logs" \
-#-ld_ckpt  "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/tf_ckpt/checkpoint_after_finalstep.ckpt" \
-#-savd_tst "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/shuffled_test_img.txt" \
-#-savd_gt  "/home/mrc689/DistributedCNN/results/xavier/train/4_GPU/shuffled_test_gt.txt"
+#python refined_test.py  -l "/home/mrc689/results/manual/1109-0704/tf_logs" \
+#-ld_ckpt  "/home/mrc689/results/manual/1109-0704/tf_ckpt/checkpoint_after_finalstep.ckpt" \
+#-savd_tst "/home/mrc689/results/manual/1109-0704/shuffled_test_img.txt" \
+#-savd_gt  "/home/mrc689/results/manual/1109-0704/shuffled_test_gt.txt"
 
-#python refined_train.py -i "/home/mrc689/Sampled_Dataset" \
-#-gt "/home/mrc689/Sampled_Dataset_GT/density_map/manual" \
-#-l "/home/mrc689/tf_logs" \
-#-ckpt_path "/home/mrc689/tf_ckpt"
+python refined_train.py -i "/home/mrc689/Sampled_Dataset" \
+-gt "/home/mrc689/Sampled_Dataset_GT/density_map/manual" \
+-l "/home/mrc689/tf_logs" \
+-ckpt_path "/home/mrc689/tf_ckpt"
 
 #python refined_train.py -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
 #-gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
@@ -74,12 +78,12 @@
 #     -tsk_index 0  \
 #     -ckpt_path "/discus/P2IRC/rashid/tf_ckpt"
 
-python distributed_train_tweaked.py \
-     -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
-     -gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
-     -pshosts "192.168.1.21:2222" \
-     -wkhosts "192.168.1.22:2222" \
-     -job "worker" \
-     -tsk_index 0 \
-     -ckpt_path "/discus/P2IRC/rashid/tf_ckpt"
+#python distributed_train_tweaked.py \
+#     -i "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset" \
+#     -gt "/data/mounted_hdfs_path/user/hduser/mrc689/Sampled_Dataset_GT/density_map/xavier" \
+#     -pshosts "192.168.1.21:2222" \
+#     -wkhosts "192.168.1.22:2222" \
+#     -job "worker" \
+#     -tsk_index 0 \
+#     -ckpt_path "/discus/P2IRC/rashid/tf_ckpt"
 

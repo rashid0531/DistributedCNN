@@ -1,91 +1,54 @@
 import glob
 import pickle
 import itertools
-import Model.config as config
 import tensorflow as tf
 import numpy as np
 import cv2
 import random
+import collections
+import Model.config as config
 
+def CountFrequency(arr):
+
+    freq = collections.Counter(arr)
+    return freq	
 
 def get_balanced_dataset(image,gt):
 
-    number_of_bins = 3
+    number_of_bins = 6
 
     elements_in_bins =  [[] for _ in range(number_of_bins)]
  
     for i in range(0,len(image)):
 
-        count = np.sum(np.load(gt[i]))
-
-        if (count < 1):
+        count = int(round(np.sum(np.load(gt[i]))))
+        
+        if (count == 0):
             elements_in_bins[0].append((image[i],gt[i]))
 
-        elif (count >= 1 and count <= 2):
+        if (count == 1):
             elements_in_bins[1].append((image[i],gt[i]))
 
-        elif (count > 2):
+        if (count == 2):
             elements_in_bins[2].append((image[i],gt[i]))
              
-            # To add these data in test set.
-            #if (count > 8):
-                #print(image[i])
-
-    #print(len(elements_in_bins),"\n", len(elements_in_bins[0]),len (elements_in_bins[1]),len(elements_in_bins[2]))
-
-    randomly_sampled_dataset = []
-
-    #random.seed(354)
-
-    number_of_samples = 525
-
-    for i in range(0,len(elements_in_bins)):
-        randomly_sampled_dataset.append(random.sample(elements_in_bins[i],number_of_samples))
-
-    flatten_list = list(itertools.chain.from_iterable(randomly_sampled_dataset))
-
-    random.shuffle(flatten_list)
- 
-    return flatten_list
-
-
-
-def get_balanced_dataset_automatic(image,gt):
-
-    number_of_bins = 3
-
-    elements_in_bins =  [[] for _ in range(number_of_bins)]
- 
-    for i in range(0,len(image)):
-
-        count = np.sum(np.load(gt[i]))
-
-        if (count <= 20):
-            elements_in_bins[0].append((image[i],gt[i]))
-
-        elif (count > 20 and count <= 40):
-            elements_in_bins[1].append((image[i],gt[i]))
-
-        elif (count > 40 and count <= 200):
-            elements_in_bins[2].append((image[i],gt[i]))
-
-        """
-        elif (count >80 and count <= 200):
+        if (count >= 3 and count <=4):
             elements_in_bins[3].append((image[i],gt[i]))
-             
-            # To add these data in test set.
-            #if (count > 8):
-                #print(image[i])
-        """
+
+        if (count > 4 and count < 8):
+            elements_in_bins[4].append((image[i],gt[i]))
+
+        if (count >= 8):
+            elements_in_bins[5].append((image[i],gt[i]))
 
     print("Number of Bins : ",len(elements_in_bins),"\n")
-    print("Images per Bin: ",len(elements_in_bins[0]),",",len (elements_in_bins[1]),",",len(elements_in_bins[2]),"\n")
-
+    print("Images per Bin: ",list(map(lambda x : len(x),elements_in_bins)))
+    
     randomly_sampled_dataset = []
 
-    #random.seed(354)
-
-    number_of_samples = np.min([len(elements_in_bins[0]),len(elements_in_bins[1]),len(elements_in_bins[2])])
+    # Take either the bin which has the minimum number of flowers.
+    # Or, take the last bin containing images which has maximum number of flowers.
+    number_of_samples = np.min(list(map(lambda x : len(x),elements_in_bins)))
     print("Number of samples to be collected from each bin : ",number_of_samples)
 
     random.seed(354)
@@ -98,7 +61,6 @@ def get_balanced_dataset_automatic(image,gt):
     random.shuffle(flatten_list)
  
     return flatten_list
-
 
 
 def filter_item(directory):
@@ -117,70 +79,20 @@ def filter_item(directory):
             image_name,camera_id = (each_image.split("/")[-1]).split("_")[0], (each_image.split("/")[-2])
 
             image_name = int(image_name.replace("frame",""))
-
-            """
-            if camera_id.split('-')[0] == '1109':
-
-                 dict= {}
-
-                 days_to_look_for = ['0706','0712']
-
-                 if camera_id.split('-')[1] in days_to_look_for:
-
-                     if (image_name >= 250 and image_name<= 1329):
-
-                         dict['camera_id'] = '1109'
-                         dict['capturing_day'] = camera_id.split('-')[1]
-                         dict['image_name'] = each_image
-                         cameraid_capturing_days.append(dict)
-            """
             
             if camera_id.split('-')[0] == '1109':
 
                  dict= {}
 
-                 #days_to_look_for = ['0803','0805']
-                 days_to_look_for = ['0805','0806']
-
+                 #days_to_look_for = ['0704','0710']
+                 days_to_look_for = ['0704']
+  
                  if camera_id.split('-')[1] in days_to_look_for:
 
-                     if (image_name <= 950):
-
-                         dict['camera_id'] = '1109'
-                         dict['capturing_day'] = camera_id.split('-')[1]
-                         dict['image_name'] = each_image
-                         cameraid_capturing_days.append(dict)
-
-                 
-                 dict= {}
-
-                 days_to_look_for = ['0802']
-
-                 if camera_id.split('-')[1] in days_to_look_for:
-
-                     if (image_name <= 690):
-
-                         dict['camera_id'] = '1109'
-                         dict['capturing_day'] = camera_id.split('-')[1]
-                         dict['image_name'] = each_image
-                         cameraid_capturing_days.append(dict)
-
-            """
-            if camera_id.split('-')[0] == '1237':
-
-                dict = {}
-
-                days_to_look_for = ['0725']
-                #days_to_look_for = ['0715', '0720', '0725']
-
-                if camera_id.split('-')[1] in days_to_look_for:
-
-                    dict['camera_id'] = '1237'
-                    dict['capturing_day'] = camera_id.split('-')[1]
-                    dict['image_name'] = each_image
-
-                    cameraid_capturing_days.append(dict)
-                """
+                     dict['camera_id'] = '1109'
+                     dict['capturing_day'] = camera_id.split('-')[1]
+                     dict['image_name'] = each_image
+                     cameraid_capturing_days.append(dict)
 
     return cameraid_capturing_days
 
@@ -189,8 +101,6 @@ def get_filtered_dataset(img_dir,gt_dir):
 
     cameraid_capturing_days = filter_item(img_dir)
 
-    #print("_____", gt_dir)
-
     annotated_gt = filter_item(gt_dir)
 
     return cameraid_capturing_days, annotated_gt
@@ -198,33 +108,55 @@ def get_filtered_dataset(img_dir,gt_dir):
 
 def find_them(img_list, gt_list):
 
-    names_of_img_den_arr = []
-    name_of_imgs = []
+    names_of_gt = []
+    names_of_imgs = []
     culprits = []
+    present_in_gt_but_not_in_imgs = []
 
     for each_item in gt_list:
-        i_want_this_part = each_item['image_name'].split("/")[-1].split(".")[0]
-        names_of_img_den_arr.append(i_want_this_part)
+        name_of_the_file = each_item['image_name'].split("/")[-1].split(".")[0]
+        names_of_gt.append(name_of_the_file)
 
     for each_item in img_list:
-        i_want_this_part = each_item['image_name'].split("/")[-1].split(".")[0]
-        name_of_imgs.append(i_want_this_part)
+        name_of_the_file = each_item['image_name'].split("/")[-1].split(".")[0]
+        names_of_imgs.append(name_of_the_file)
 
-    for i in name_of_imgs:
-        if i not in names_of_img_den_arr:
-            culprits.append(i)
+    # If the gt list is smaller than the image list, then remove the unmatching images. 
+    if (len(img_list) > len(gt_list)):
+
+        for i in names_of_imgs:
+            if i not in names_of_gt:
+                culprits.append(i)
+
+        for each_element in names_of_gt:
+            found = False
+
+            for each_line in names_of_imgs:
+
+                if str(each_element) in str(each_line):
+                    found = True
+
+            if not found:
+                print("Couldn't find the images for the ground truth :", each_element)
+
+    else:
+
+        for i in names_of_gt:
+            if i not in names_of_imgs:
+                culprits.append(i)
 
     return culprits
 
 
-def remove_missing_gt(img_list, gt_list):
+def remove_missing_img_gt(item_list, delete_from_this_list):
 
-    for each_item in img_list:
+    for i in item_list:
+        for j in delete_from_this_list:
 
-        if (each_item['image_name'].split("/")[-1].split(".")[0] in gt_list):
-            img_list.remove(each_item)
+            if (j['image_name'].split("/")[-1].split(".")[0] == i):
+                delete_from_this_list.remove(j)
 
-    return img_list
+    return delete_from_this_list
 
 
 def get_train_test_DataSet(image_path,gt_path,ratio):
@@ -269,16 +201,22 @@ def get_train_test_DataSet(image_path,gt_path,ratio):
                 print(msg)
 
                 culprits = find_them(img_list=filtered_img, gt_list=filtered_gt)
-                print(culprits)
-                # print(msg)
+                print("Length of culprits", len(culprits))
 
-                culprits = find_them(img_list=filtered_img, gt_list=filtered_gt)
-                # print(culprits)
+                if (len(filtered_img) > len(filtered_gt)):
+                    print('Before removing images with abscent gts : ', len(filtered_img))
+                    refined_img_list = remove_missing_img_gt(item_list = culprits, delete_from_this_list = filtered_img)
+                    refined_gt_list = filtered_gt
+                    print('After removing images with abscent gts : ', len(refined_img_list))
+                else:
 
-                refined_img_list = remove_missing_gt(img_list=filtered_img, gt_list=culprits)
+                    refined_img_list = filtered_img
+                    refined_gt_list = remove_missing_img_gt(item_list = culprits, delete_from_this_list = filtered_gt)
+
+                print("Length of img list and gt list", len(refined_img_list),len(refined_gt_list))
 
                 filtered_image_dataset.append(refined_img_list)
-                filtered_gt_dataset.append(filtered_gt)
+                filtered_gt_dataset.append(refined_gt_list)
 
             else:
 
@@ -288,11 +226,12 @@ def get_train_test_DataSet(image_path,gt_path,ratio):
         # Flat the lists
         filtered_image_dataset = list(itertools.chain.from_iterable(filtered_image_dataset))
         filtered_gt_dataset = list(itertools.chain.from_iterable(filtered_gt_dataset))
-
+        
     else:
 
         filtered_image_dataset = img_dataset
         filtered_gt_dataset = gt_labelset
+
 
     filtered_image_dataset = sorted(filtered_image_dataset, key=lambda k: k['image_name'])
     filtered_gt_dataset = sorted(filtered_gt_dataset, key=lambda k: k['image_name'])
@@ -300,36 +239,43 @@ def get_train_test_DataSet(image_path,gt_path,ratio):
     # Filtering only the image name from the each dictionary.
     filtered_image_dataset = list(map(lambda x: x['image_name'],filtered_image_dataset))
     filtered_gt_dataset = list(map(lambda x: x['image_name'],filtered_gt_dataset))
+
+    ##################################################
    
-    #print(filtered_image_dataset[0],filtered_gt_dataset[0])
-
-    # From here    
-    paired_img_gt = list(zip(filtered_image_dataset, filtered_gt_dataset))
-
-    random.seed(354)
-    # Shuffles the whole list 
-    random.shuffle(paired_img_gt)
-
-    #print(paired_img_gt[0])
-
-    filtered_image_dataset, filtered_gt_dataset = zip(*paired_img_gt)
-    
-    # To here.
-    #dataset = get_balanced_dataset(filtered_image_dataset,filtered_gt_dataset) 
-    dataset = get_balanced_dataset_automatic(filtered_image_dataset,filtered_gt_dataset) 
+    # If manual annotation is used then uncomment the following line.
+    dataset = get_balanced_dataset(filtered_image_dataset,filtered_gt_dataset) 
+    #dataset = get_balanced_dataset_automatic(filtered_image_dataset,filtered_gt_dataset) 
 
     filtered_image_dataset = []
     filtered_gt_dataset = []
 
-    for index in range(len(dataset)):
+    for index in range(0,len(dataset)):
 
         filtered_image_dataset.append(dataset[index][0])
         filtered_gt_dataset.append(dataset[index][1])
 
-    #print(filtered_image_dataset[0],filtered_gt_dataset[0])
-    
-    # The following steps are necessary if we want to balance that dataset by sampling same number of images from the different bins.
-    # The first bin has 0 to one flower, the second bin has two - three flowers and the last bin has more than four flowers.
+    '''
+    # For experimental purpose added few manually annotated images from 1109-0710. /home/mrc689/results/manual/1109-0710
+
+    with open('/home/mrc689/results/manual/1109-0710/shuffled_test_img.txt',"r") as file_obj:
+
+        lines = file_obj.readlines()
+
+        for eachline in lines:
+            eachline = eachline.strip()
+            filtered_image_dataset.append(eachline)
+
+    with open('/home/mrc689/results/manual/1109-0710/shuffled_test_gt.txt',"r") as file_obj:
+
+        lines = file_obj.readlines()
+
+        for eachline in lines:
+            eachline = eachline.strip()
+            filtered_gt_dataset.append(eachline)
+    '''
+
+    filtered_image_dataset = sorted(filtered_image_dataset)
+    filtered_gt_dataset = sorted(filtered_gt_dataset)
 
     trainset_limit = int(len(filtered_image_dataset) * ratio)
         
@@ -338,17 +284,8 @@ def get_train_test_DataSet(image_path,gt_path,ratio):
     test_img_set = filtered_image_dataset[trainset_limit:]
     test_gt_set = filtered_gt_dataset[trainset_limit:]
 
-    # Just to make sure the training set includes the images with more than nine flowers, I am adding the following six images.
-    """
-    image_set = ["/home/mrc689/Sampled_Dataset/1109-0802/frame000150_1_3.jpg","/home/mrc689/Sampled_Dataset/1109-0802/frame000231_1_3.jpg","/home/mrc689/Sampled_Dataset/1109-0802/frame000150_1_4.jpg","/home/mrc689/Sampled_Dataset/1109-0802/frame000154_1_4.jpg","/home/mrc689/Sampled_Dataset/1109-0802/frame000148_1_4.jpg","/home/mrc689/Sampled_Dataset/1109-0802/frame000420_1_3.jpg"] 
-    gt_set = ["/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0802/frame000150_1_3.npy","/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0802/frame000231_1_3.npy","/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0802/frame000150_1_4.npy","/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0802/frame000154_1_4.npy","/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0802/frame000148_1_4.npy","/home/mrc689/Sampled_Dataset_GT/density_map/manual/1109-0802/frame000420_1_3.npy"]
-
-    for i in range(0,len(image_set)):
-        train_img_set.append(image_set[i])
-        train_gt_set.append(gt_set[i]) 
-    """
     return train_img_set,train_gt_set,test_img_set,test_gt_set
-    
+
 
 def read_npy_file(image_name,item):
 
@@ -371,7 +308,6 @@ def read_npy_file(image_name,item):
     return image_name,data.astype(np.float32)
 
 
-
 def _parse_function(image_path,groundTruth_path):
 
     image_string = tf.read_file(image_path)
@@ -384,11 +320,17 @@ def _parse_function(image_path,groundTruth_path):
     return image_path,image,groundTruth_path
 
 
+
 if __name__ == "__main__":
 
    image_path = "/home/mrc689/Sampled_Dataset"
-   gt_path = "/home/mrc689/Sampled_Dataset_GT/density_map/xavier"
+   gt_path = "/home/mrc689/Sampled_Dataset_GT/density_map/manual"
    dataset_train_test_ratio = 0.7
 
    img , gt, dhiki, chiki = get_train_test_DataSet(image_path,gt_path,dataset_train_test_ratio)
+
+   print(img[151],gt[151])
+   print(img[-10],gt[-10])
+   print(chiki[151],dhiki[151])
+   print(chiki[-10],dhiki[-10])
     

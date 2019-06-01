@@ -1,27 +1,22 @@
 #!/usr/bin/env python
 import argparse
 import tensorflow as tf
-import os
-from PIL import Image, ImageFile
-import numpy as np
-import prepare
-from matplotlib import pyplot as plt
-from datetime import datetime
 from tensorflow.python.client import timeline
-import modified_MCNN as model
-import os
-import re
 import time
 from datetime import datetime
 import subprocess
 import psutil
+import os
 
-#os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5,6,7"
+import Model.prepare as prepare
+import Model.modified_MCNN as model
 
-#os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
+# Sets the threshold for what messages will be logged.
+tf.logging.set_verbosity(tf.logging.INFO)
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
+os.environ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3,4,5,6,7"
+#os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
 
 # This function kills all the child processes associated with the parent process sent as function argument. 
 def kill(proc_pid):
@@ -39,7 +34,6 @@ def get_available_gpus():
     from tensorflow.python.client import device_lib
     local_device_protos = device_lib.list_local_devices()
     return [x.name for x in local_device_protos if x.device_type == 'GPU']
-
 
 def training_dataset(args):
 
@@ -84,7 +78,6 @@ def training_dataset(args):
 
 
     return Batched_dataset_train
-
 
 
 def core_model(input_image):
@@ -157,13 +150,15 @@ def do_training(args, update_op, loss, summary):
 
         end_point = int((TRAINSET_LENGTH * int(args["number_of_epoch"])) / int(args["batch_size"]))
 
+        print("Endpoint: ", end_point)
+
         for step in range(0, end_point):
 
             start_time = time.time()
             _, loss_value = sess.run((update_op, loss))
 
             duration = time.time() - start_time
-            if step % 10 == 0:
+            if step % 2 == 0:
                 # num_examples_per_step = FLAGS.batch_size * FLAGS.num_gpus
 
                 num_examples_per_step = args["batch_size"]
@@ -384,12 +379,12 @@ if __name__ == "__main__":
     #DEFAULT_TRAINSET_LENGTH = len(train_set_image)
 
     # The following default values will be used if not provided from the command line arguments.
-    DEFAULT_NUMBER_OF_GPUS = 1
-    DEFAULT_EPOCH = 5999
+    DEFAULT_NUMBER_OF_GPUS = 8
+    DEFAULT_EPOCH = 999
     # DEFAULT_MAXSTEPS = 20
-    DEFAULT_BATCHSIZE_PER_GPU = 16
+    DEFAULT_BATCHSIZE_PER_GPU = 64
     DEFAULT_BATCHSIZE = DEFAULT_BATCHSIZE_PER_GPU * DEFAULT_NUMBER_OF_GPUS
-    DEFAULT_PARALLEL_THREADS = 8
+    DEFAULT_PARALLEL_THREADS = 4
     DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE * DEFAULT_NUMBER_OF_GPUS * 2
     DEFAULT_IMAGE_PATH = "/home/mrc689/Sampled_Dataset"
     DEFAULT_GT_PATH = "/home/mrc689/Sampled_Dataset_GT/density_map"
