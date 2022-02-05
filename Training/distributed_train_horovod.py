@@ -8,7 +8,7 @@ import Model.prepare as prepare
 from matplotlib import pyplot as plt
 from datetime import datetime
 from tensorflow.python.client import timeline
-import Model.modified_MCNN as model
+import Model.multicolumn_cnn as model
 import os
 import re
 import time

@@ -11,7 +11,7 @@ import numpy as np
 import sys
 
 import Model.prepare as prepare
-import Model.modified_MCNN as model
+import Model.multicolumn_cnn as model
 
 # Sets the threshold for what messages will be logged.
 tf.logging.set_verbosity(tf.logging.INFO)

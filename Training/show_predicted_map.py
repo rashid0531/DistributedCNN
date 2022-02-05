@@ -12,7 +12,7 @@ import time
 from datetime import datetime
 
 import Model.prepare as prepare
-import Model.modified_MCNN as model
+import Model.multicolumn_cnn as model
 
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
