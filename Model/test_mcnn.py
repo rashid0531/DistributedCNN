@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import multicolumn_cnn
 from pathlib import Path
 
-from util import util
+from utils import util
 
 if __name__ == "__main__":
 
