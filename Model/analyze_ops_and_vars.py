@@ -1,4 +1,4 @@
-# This code is taken from the tf.slim's fithub repo.
+# This code is taken from the tf.slim's github repo.
 # weblink: https://github.com/baidu-research/tensorflow-allreduce/blob/master/tensorflow/contrib/slim/python/slim/model_analyzer.py
 
 def tensor_description(var):

@@ -1,71 +1,84 @@
-import tensorflow as tf
-import config as config
+from turtle import shape
+from tensorflow import keras
+from keras import layers
 
-class MCNN():
+import config
 
-    def __init__(self,input_image):
+NUMBER_OF_KERNELS_IDX = 0
+KERNEL_SIZE_IDX = 1
+STRIDE_IDX = 2
 
-        # column1_design : a tuple that contains the parameters for each layer of CNN.
+class IndividualColumn():
 
-        self._column1_design = config.column1_design
-        self._column2_design = config.column2_design
-        self._column3_design = config.column3_design
-        self._final_layer_design = config.final_layer_design
+    def __init__(self, inputs, column_config: dict):
 
-        self.column1_output = self.Shallow(input_image,self._column1_design, 'column1/')
-        self.column2_output = self.Shallow(input_image,self._column2_design, 'column2/')
-        self.column3_output = self.Shallow(input_image,self._column3_design, 'column3/')
-        self.fusion = tf.concat([self.column1_output,self.column2_output,self.column3_output],axis = 3)
-        self.final_layer_output = self.final_layer(self.fusion,self._final_layer_design)
+        super().__init__()
+        conv_layer_1 = layers.Conv2D(filters=column_config['conv1'][NUMBER_OF_KERNELS_IDX], 
+                                    kernel_size=column_config['conv1'][KERNEL_SIZE_IDX], 
+                                    strides=column_config['conv1'][STRIDE_IDX], 
+                                    activation='relu', 
+                                    padding='same')(inputs)
+        maxpool_layer_1 = layers.MaxPooling2D(pool_size=(column_config['maxPool1'][NUMBER_OF_KERNELS_IDX], column_config['maxPool1'][NUMBER_OF_KERNELS_IDX]), 
+                                                padding='valid')(conv_layer_1)
 
+        conv_layer_2 = layers.Conv2D(filters=column_config['conv2'][NUMBER_OF_KERNELS_IDX], 
+                                    kernel_size=column_config['conv2'][KERNEL_SIZE_IDX], 
+                                    strides=column_config['conv2'][STRIDE_IDX], 
+                                    activation='relu', 
+                                    padding='same')(maxpool_layer_1)
+        maxpool_layer_2 = layers.MaxPooling2D(pool_size=(column_config['maxPool2'][NUMBER_OF_KERNELS_IDX], column_config['maxPool2'][NUMBER_OF_KERNELS_IDX]),
+                                            padding='valid')(conv_layer_2)
 
-    def Shallow(self,input_image,properties,variable_layer_name):
+        conv_layer_3 = layers.Conv2D(filters=column_config['conv3'][NUMBER_OF_KERNELS_IDX], 
+                                    kernel_size=column_config['conv3'][KERNEL_SIZE_IDX], 
+                                    strides=column_config['conv3'][STRIDE_IDX], 
+                                    activation='relu', 
+                                    padding='same')(maxpool_layer_2)
 
-        # First convolutional layer
-        conv1 = tf.layers.conv2d(input_image, filters=properties['conv1'][0], kernel_size=properties['conv1'][1],
-                                 strides=[properties['conv1'][2], properties['conv1'][2]], padding="SAME", activation=tf.nn.relu,name = variable_layer_name +'conv1')
+        conv_layer_4 = layers.Conv2D(filters=column_config['conv4'][NUMBER_OF_KERNELS_IDX], 
+                                    kernel_size=column_config['conv4'][KERNEL_SIZE_IDX], 
+                                    strides=column_config['conv4'][STRIDE_IDX], 
+                                    activation='relu',
+                                    padding='same')(conv_layer_3)
 
-        # Max pool layer - 1st
-        max_pool1 = tf.nn.max_pool(conv1, ksize=[1, properties['maxPool1'][0], properties['maxPool1'][0], 1],
-                                   strides=[1, properties['maxPool1'][1],properties['maxPool1'][1], 1], padding="VALID")
+        deconv_layer_1 = layers.Conv2DTranspose(filters=column_config['conv4'][NUMBER_OF_KERNELS_IDX], 
+                                                kernel_size=column_config['conv4'][KERNEL_SIZE_IDX], 
+                                                strides=2, 
+                                                activation='relu', 
+                                                padding='same')(conv_layer_4)
 
-        # 2nd convolutional layer
-        conv2 = tf.layers.conv2d(max_pool1, filters=properties['conv2'][0], kernel_size=properties['conv2'][1],
-                                 strides=[properties['conv2'][2], properties['conv2'][2]], padding="SAME",
-                                 activation=tf.nn.relu,name = variable_layer_name +'conv2')
-
-        # Max pool layer - 2nd
-        max_pool2 = tf.nn.max_pool(conv2, ksize=[1, properties['maxPool2'][0], properties['maxPool2'][0], 1],
-                                   strides=[1, properties['maxPool2'][1], properties['maxPool2'][1], 1],
-                                   padding="VALID")
-
-        # 3rd convolutional layer
-        conv3 = tf.layers.conv2d(max_pool2, filters=properties['conv3'][0], kernel_size=properties['conv3'][1],
-                                 strides=[properties['conv3'][2], properties['conv3'][2]], padding="SAME",
-                                 activation=tf.nn.relu,name = variable_layer_name + 'conv3')
-
-        # 3rd convolutional layer
-        conv4 = tf.layers.conv2d(conv3, filters=properties['conv4'][0], kernel_size=properties['conv4'][1],
-                                 strides=[properties['conv4'][2], properties['conv4'][2]], padding="SAME",
-                                 activation=tf.nn.relu,name = variable_layer_name + 'conv4')
-
-        # 1st Deconvolutional layer
-        transposed_conv1 = tf.layers.conv2d_transpose(conv4,filters=properties['conv4'][0], kernel_size=properties['conv4'][1],
-                                 strides=[2,2], padding="SAME",
-                                 activation=tf.nn.relu,name = variable_layer_name + 'deconv1')
-
-        # 2nd Deconvolutional layer
-        transposed_conv2 = tf.layers.conv2d_transpose(transposed_conv1,filters=properties['conv3'][0], kernel_size=properties['conv3'][1], 
-                                 strides=[2,2], padding="SAME",
-                                 activation=tf.nn.relu,name = variable_layer_name + 'deconv2')
+        deconv_layer_2 = layers.Conv2DTranspose(filters=column_config['conv3'][NUMBER_OF_KERNELS_IDX], 
+                                                kernel_size=column_config['conv3'][KERNEL_SIZE_IDX], 
+                                                strides=2, 
+                                                activation='relu', 
+                                                padding='same')(deconv_layer_1)
+        
+        self.output = deconv_layer_2
 
 
-        return transposed_conv2
+    def get_output(self):
+        return self.output
 
-    def final_layer(self,input,properties):
 
-        final_conv = tf.layers.conv2d(input, filters=properties['conv1'][0], kernel_size=properties['conv1'][1],
-                                 strides=[properties['conv1'][2], properties['conv1'][2]], padding="SAME",
-                                 activation=tf.nn.relu,name = 'final_conv')
+def get_model(image_size):
 
-        return final_conv
+    inputs = keras.Input(shape=image_size)
+    x = layers.Rescaling(1./255)(inputs)
+
+    column_1 = IndividualColumn(inputs=x, column_config=config.column1_design).get_output()
+    column_2 = IndividualColumn(inputs=x, column_config=config.column2_design).get_output()
+    column_3 = IndividualColumn(inputs=x, column_config=config.column3_design).get_output()
+    coalesce_columns = layers.Concatenate(axis=3)([column_1, column_2, column_3])
+    predict_layer_density_map = layers.Conv2D(filters=config.final_layer_design['conv1'][NUMBER_OF_KERNELS_IDX], 
+                                kernel_size=config.final_layer_design['conv1'][KERNEL_SIZE_IDX], 
+                                strides=config.final_layer_design['conv1'][STRIDE_IDX], 
+                                activation='relu',
+                                padding='same')(coalesce_columns)
+
+    model = keras.Model(inputs, predict_layer_density_map)
+    return model
+
+
+def get_summary(model: keras.Model):
+
+    return model.summary()

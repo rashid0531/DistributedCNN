@@ -4,7 +4,7 @@ import tensorflow as tf
 import os
 from PIL import Image, ImageFile
 import numpy as np
-import Model.prepare as prepare
+import Preprocessing.prepare as prepare
 from matplotlib import pyplot as plt
 from datetime import datetime
 from tensorflow.python.client import timeline

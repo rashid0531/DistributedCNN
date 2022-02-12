@@ -11,7 +11,7 @@ import re
 import time
 from datetime import datetime
 
-import Model.prepare as prepare
+import Preprocessing.prepare as prepare
 import Model.multicolumn_cnn as model
 
 

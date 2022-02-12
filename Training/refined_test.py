@@ -10,7 +10,7 @@ import os
 import numpy as np
 import sys
 
-import Model.prepare as prepare
+import Preprocessing.prepare as prepare
 import Model.multicolumn_cnn as model
 
 # Sets the threshold for what messages will be logged.
