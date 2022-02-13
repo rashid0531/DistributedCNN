@@ -11,7 +11,6 @@ STRIDE_IDX = 2
 class IndividualColumn():
 
     def __init__(self, inputs, column_config: dict):
-
         super().__init__()
         conv_layer_1 = layers.Conv2D(filters=column_config['conv1'][NUMBER_OF_KERNELS_IDX], 
                                     kernel_size=column_config['conv1'][KERNEL_SIZE_IDX], 
@@ -61,7 +60,6 @@ class IndividualColumn():
 
 
 def get_model(image_size):
-
     inputs = keras.Input(shape=image_size)
     x = layers.Rescaling(1./255)(inputs)
 
@@ -80,5 +78,4 @@ def get_model(image_size):
 
 
 def get_summary(model: keras.Model):
-
     return model.summary()
