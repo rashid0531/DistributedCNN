@@ -9,13 +9,12 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint, CSVLogger
 
 DEFAULT_IMAGE_PATH = Path('./mock_data/training_images/1109-0704/')
 DEFAULT_GT_PATH = Path('./mock_data/ground_truth/1109-0704/')
+DEFAULT_LOG_PATH = Path('../logs/results.csv')
+DEFAULT_CHECKPOINT_PATH = Path('../checkpoints')
+
 input_shape = (224, 224, 3)
 DEFAULT_BATCHSIZE_PER_GPU = 8
 DEFAULT_PREFETCH_BUFFER_SIZE = DEFAULT_BATCHSIZE_PER_GPU * 4
-
-
-# Continue from chapter 7.3
-# https://cs230.stanford.edu/blog/datapipeline/
 
 
 def load_ny_file_as_eager_tensor(gt_ny_file_path):
@@ -44,35 +43,40 @@ def root_mean_squared_error(y_true, y_pred):
             tf.reduce_sum(
                 tf.square(
                     tf.subtract(y_true, y_pred)), axis=[1, 2, 3], keepdims=True)))
-
     return loss
 
 
 def get_callbacks():
     callbacks_list = [
         EarlyStopping(monitor="mean_absolute_error", patience=5),
-        ModelCheckpoint(filepath="checkpoint_path.keras", monitor="mean_absolute_error", save_best_only=True),
-        CSVLogger("results.csv")
+        ModelCheckpoint(filepath=DEFAULT_CHECKPOINT_PATH/"checkpoint_path.keras",
+                        monitor="mean_absolute_error",
+                        save_best_only=True),
+        CSVLogger(DEFAULT_LOG_PATH)
     ]
-
     return callbacks_list
 
 
-train_images, train_gts = load_training_image_groundtruth(DEFAULT_IMAGE_PATH, DEFAULT_GT_PATH)
-dataset = tf.data.Dataset.from_tensor_slices((train_images, train_gts))
-dataset = dataset.shuffle(len(train_images)). \
-    map(read_img_numpy_files, num_parallel_calls=4). \
-    batch(5, drop_remainder=True). \
-    prefetch(128). \
-    repeat()
+def run():
+    train_images, train_gts = load_training_image_groundtruth(DEFAULT_IMAGE_PATH, DEFAULT_GT_PATH)
+    dataset = tf.data.Dataset.from_tensor_slices((train_images, train_gts))
+    dataset = dataset.shuffle(len(train_images)). \
+        map(read_img_numpy_files, num_parallel_calls=4). \
+        batch(5, drop_remainder=True). \
+        prefetch(128). \
+        repeat()
 
-iterator = iter(dataset)
-images, ground_truths = iterator.get_next()
+    iterator = iter(dataset)
+    images, ground_truths = iterator.get_next()
 
-model = multicolumn_cnn.get_model(input_shape)
-optimizer = tf.keras.optimizers.Adam(learning_rate=0.000001)
-model.compile(optimizer=optimizer,
-              loss=root_mean_squared_error,
-              metrics=[tf.keras.metrics.MeanAbsoluteError()])
+    model = multicolumn_cnn.get_model(input_shape)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=0.000001)
+    model.compile(optimizer=optimizer,
+                  loss=root_mean_squared_error,
+                  metrics=[tf.keras.metrics.MeanAbsoluteError()])
 
-model.fit(images, ground_truths, epochs=5, batch_size=5, callbacks=get_callbacks())
+    model.fit(images, ground_truths, epochs=5, batch_size=5, callbacks=get_callbacks())
+
+
+if __name__ == '__main__':
+    run()
