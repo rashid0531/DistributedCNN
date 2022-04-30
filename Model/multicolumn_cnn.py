@@ -2,7 +2,7 @@ from turtle import shape
 from tensorflow import keras
 from keras import layers
 
-import config
+import DistributedCNN.model.config as config
 
 NUMBER_OF_KERNELS_IDX = 0
 KERNEL_SIZE_IDX = 1

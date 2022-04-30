@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 import multicolumn_cnn
 from pathlib import Path
 
-from utils import util
+from DistributedCNN.utils import util
 
 if __name__ == "__main__":
     input_shape = (224, 224, 3)
